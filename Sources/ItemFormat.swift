@@ -116,3 +116,29 @@ struct KItemFormatTemplet {
     var m_byNumSlashTraces: UInt8 = 0
 }
 
+struct EFlags {
+    static let FLAG_BIT_FASHION = 0
+    static let FLAG_BIT_VESTED = 1
+    static let FLAG_BIT_CAN_ENCHANT = 2
+    static let FLAG_BIT_CAN_USE_INVENTORY = 3
+    static let FLAG_BIT_NO_EQUIP = 4
+    static let FLAG_BIT_IS_PC_BANG = 5
+    static let FLAG_BIT_CAN_HYPER_MODE = 6
+    static let FLAG_BIT_HIDE_SET_DESC = 7
+    static let FLAG_POS_USE_TYPE = 8
+    static let FLAG_NUM_USE_TYPE = 4
+    static let FLAG_POS_USE_CONDITION = 12
+    static let FLAG_NUM_USE_CONDITION = 4
+    static let FLAG_POS_ITEM_TYPE = 16
+    static let FLAG_NUM_ITEM_TYPE = 4
+    static let FLAG_POS_ITEM_GRADE = 20
+    static let FLAG_NUM_ITEM_GRADE = 4
+    static let FLAG_POS_PERIOD_TYPE = 24
+    static let FLAG_NUM_PERIOD_TYPE = 4
+    static let FLAG_POS_SHOP_PRICE_TYPE = 28
+    static let FLAG_NUM_SHOP_PRICE_TYPE = 4
+}
+
+struct EFlags2 {
+    static let FLAG_BIT_PVP_ITEM = 0
+}
