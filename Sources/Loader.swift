@@ -23,7 +23,9 @@ struct Loader {
             return
         }
         
-        assert(data.count > MemoryLayout<KItemFormatHeader>.size, "验证文件大小失败")
+        let formatHeaderSize = MemoryLayout<KItemFormatHeader>.size
+        
+        assert(data.count > formatHeaderSize, "验证文件大小失败")
         
         let itemManager = ItemManager()
         
@@ -36,6 +38,10 @@ struct Loader {
         assert(header.m_dwVersion == itemManager.itemFormatVersion, "文件头格式错误")
         
         print("文件头验证成功")
+        
+        let setItemDataExample = itemManager.getSetItem(id: 10, from: data)
+        
+        print(setItemDataExample)
     }
     
     func content(path: String) -> Data? {

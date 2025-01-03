@@ -34,44 +34,41 @@ class ItemManager {
         return byte0 | (byte1 << 8) | (byte2 << 16) | (byte3 << 24)
     }
     
-//    func getSetItem(dwSetID: UInt32) -> KItemFormatSetItemData? {
-//        // 检查无效的输入条件
-//        guard dwSetID != 0, m_vecItemTempletInfo.count >= MemoryLayout<KItemFormatHeader>.size else {
-//            return nil
-//        }
-//
-//        // 取出数据起始指针
-//        let pData = m_vecItemTempletInfo.withUnsafeBytes { $0.baseAddress }
-//        guard let pData = pData else { return nil }
-//
-//        // 解析 Header
-//        let pkHeader = pData.bindMemory(to: KItemFormatHeader.self, capacity: 1).pointee
-//        let dwNumSetIDs = pkHeader.m_dwNumSetIDs
-//
-//        // 计算初始偏移量
-//        let dwOffset = MemoryLayout<KItemFormatHeader>.size +
-//            Int(pkHeader.m_dwNumItems) * (MemoryLayout<UInt32>.size + MemoryLayout<KItemFormatTemplet>.size)
-//
-//        // 获取 SetID 数组的指针
-//        let pdwSetIDPointer = pData.advanced(by: dwOffset).bindMemory(to: UInt32.self, capacity: Int(dwNumSetIDs))
-//        let pdwSetID = UnsafeBufferPointer(start: pdwSetIDPointer, count: Int(dwNumSetIDs))
-//
-//        // 在数组中查找目标 SetID
-//        guard let index = pdwSetID.firstIndex(of: dwSetID) else {
-//            assertionFailure("SetID not found")
-//            return nil
-//        }
-//
-//        // 计算最终偏移量
-//        let finalOffset = dwOffset +
-//            Int(dwNumSetIDs) * MemoryLayout<UInt32>.size +
-//            index * MemoryLayout<KItemFormatSetItemData>.size
-//
-//        // 获取最终结果指针
-//        let resultPointer = pData.advanced(by: finalOffset).bindMemory(to: KItemFormatSetItemData.self, capacity: 1)
-//        return resultPointer.pointee
-//    }
-    
-    // nSize >= (int) ( sizeof(CX2Item::KItemFormatHeader) + dwNumItem * ( sizeof(DWORD) + sizeof(CX2Item::KItemFormatTemplet) )
+    func getSetItem(id dwSetID: UInt32, from data: Data) -> KItemFormatSetItemData? {
+        // 检查无效的输入条件
+        guard dwSetID != 0, data.count >= MemoryLayout<KItemFormatHeader>.size else {
+            return nil
+        }
 
+        // 取出数据起始指针
+        let pData = data.withUnsafeBytes { $0.baseAddress }
+        guard let pData = pData else { return nil }
+
+        // 解析 Header
+        let pkHeader = pData.bindMemory(to: KItemFormatHeader.self, capacity: 1).pointee
+        let dwNumSetIDs = pkHeader.m_dwNumSetIDs
+
+        // 计算初始偏移量
+        let dwOffset = MemoryLayout<KItemFormatHeader>.size +
+            Int(pkHeader.m_dwNumItems) * (MemoryLayout<UInt32>.size + MemoryLayout<KItemFormatTemplet>.size)
+
+        // 获取 SetID 数组的指针
+        let pdwSetIDPointer = pData.advanced(by: dwOffset).bindMemory(to: UInt32.self, capacity: Int(dwNumSetIDs))
+        let pdwSetID = UnsafeBufferPointer(start: pdwSetIDPointer, count: Int(dwNumSetIDs))
+
+        // 在数组中查找目标 SetID
+        guard let index = pdwSetID.firstIndex(of: dwSetID) else {
+            assertionFailure("SetID not found")
+            return nil
+        }
+
+        // 计算最终偏移量
+        let finalOffset = dwOffset +
+            Int(dwNumSetIDs) * MemoryLayout<UInt32>.size +
+            index * MemoryLayout<KItemFormatSetItemData>.size
+
+        // 获取最终结果指针
+        let resultPointer = pData.advanced(by: finalOffset).bindMemory(to: KItemFormatSetItemData.self, capacity: 1)
+        return resultPointer.pointee
+    }
 }

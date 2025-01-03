@@ -6,7 +6,6 @@
 //
 
 import ArgumentParser
-import Figlet
 import Foundation
 
 @main
