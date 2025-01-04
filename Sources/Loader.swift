@@ -28,24 +28,24 @@ struct Loader {
         
         assert(data.count > formatHeaderSize, "验证文件大小失败")
         
-        let itemManager = ItemManager(data: data)
+        let deserializer = Deserializer(data: data)
         
         precondition(itemFormatHeaderSize == formatHeaderSize)
         precondition(itemFormatTempletSize == formatTemplateSize)
         
         
-        assert(itemManager.header.m_dwMagic == itemFormatMagic, "文件头格式错误")
-        assert(itemManager.header.m_dwVersion == itemFormatVersion, "文件头格式错误")
+        assert(deserializer.header.m_dwMagic == itemFormatMagic, "文件头格式错误")
+        assert(deserializer.header.m_dwVersion == itemFormatVersion, "文件头格式错误")
         
         print("文件头验证成功")
         
-        let itemSets = itemManager.itemSets()
+        let itemSets = deserializer.itemSets()
         let setItemDataExample = itemSets.first!
-        print(itemManager.getString(offsetBy: setItemDataExample.m_dwOffset_SetName))
+        print(deserializer.getString(offsetBy: setItemDataExample.m_dwOffset_SetName))
         
-        let itemTemplates = itemManager.itemTemplates()
+        let itemTemplates = deserializer.itemTemplates()
         let itemTemplateExample = itemTemplates.first!
-        print(itemManager.getString(offsetBy: itemTemplateExample.m_dwOffset_Name))
+        print(deserializer.getString(offsetBy: itemTemplateExample.m_dwOffset_Name))
     }
     
     func content(path: String) -> Data? {

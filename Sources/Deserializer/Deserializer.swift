@@ -13,11 +13,11 @@ let itemFormatTempletSize = 188
 let itemFormatSetItemDataSize = 20
 let itemForamtNeedPartsNumAndOption = 8
 
-let itemFormatMagic = ItemManager.MAKEFOURCC()
+let itemFormatMagic = Deserializer.MAKEFOURCC()
 let itemFormatVersion = 0x1201
 
-/// 持有并管理`data`，读取`SetItemData`和`ItemTemplate`数据，以及共享处理 `data` 的方法
-class ItemManager {
+/// 持有并管理`data`，获取`ItemSets`和`ItemTemplates`，以及共享处理 `data` 的方法
+class Deserializer {
     let data: Data
     let header: KItemFormatHeader
     
@@ -93,7 +93,7 @@ class ItemManager {
     }
 }
 
-extension ItemManager {
+extension Deserializer {
     func getString(offsetBy dwOffset: UInt32) -> String {
         guard dwOffset != 0 else { return "" }
         // 读取长度（WORD 是 2 字节）
@@ -114,7 +114,7 @@ extension ItemManager {
     }
 }
 
-extension ItemManager {
+extension Deserializer {
     static func MAKEFOURCC(_ ch0: Character = "K", _ ch1: Character = "I", _ ch2: Character = "M", _ ch3: Character = " ") -> UInt32 {
         let byte0 = UInt32(ch0.asciiValue ?? 0)
         let byte1 = UInt32(ch1.asciiValue ?? 0)

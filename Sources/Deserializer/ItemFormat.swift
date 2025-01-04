@@ -213,15 +213,15 @@ struct KItemFormatTemplet {
     }
     
     
-    func getBit(_ bitPos: UInt32) -> Bool {
+    private func getBit(_ bitPos: UInt32) -> Bool {
         return (m_dwFlags & (1 << bitPos)) != 0
     }
     
-    func getBit2(_ bitPos: UInt32) -> Bool {
+    private func getBit2(_ bitPos: UInt32) -> Bool {
         return (m_dwFlags2 & (1 << bitPos)) != 0
     }
     
-    func getValue(bitPos: UInt32, numBits: UInt32) -> UInt32 {
+    private func getValue(bitPos: UInt32, numBits: UInt32) -> UInt32 {
         return (m_dwFlags >> bitPos) & ((1 << numBits) - 1)
     }
 }
