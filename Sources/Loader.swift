@@ -33,19 +33,20 @@ struct Loader {
         precondition(itemFormatHeaderSize == formatHeaderSize)
         precondition(itemFormatTempletSize == formatTemplateSize)
         
-        guard let header = itemManager.header else {
-            print("Failed to create header.")
-            return
-        }
         
-        assert(header.m_dwMagic == itemFormatMagic, "文件头格式错误")
-        assert(header.m_dwVersion == itemFormatVersion, "文件头格式错误")
+        assert(itemManager.header.m_dwMagic == itemFormatMagic, "文件头格式错误")
+        assert(itemManager.header.m_dwVersion == itemFormatVersion, "文件头格式错误")
         
         print("文件头验证成功")
         
 //        let setItemDataExample = itemManager.getSetItem(id: 10, from: data)!
 //        print(itemManager.getString(offsetBy: setItemDataExample.m_dwOffset_SetName))
 //        print(setItemDataExample.getSetItemNeedPartsNumNOptions(from: data))
+        
+        let itemTemplateExample = itemManager.getItemTemplate(itemID: 1)!
+        print(itemManager.getString(offsetBy: itemTemplateExample.m_dwOffset_Name))
+        
+        
     }
     
     func content(path: String) -> Data? {

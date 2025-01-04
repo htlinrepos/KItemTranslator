@@ -7,21 +7,21 @@
 
 import Foundation
 
-enum USE_CONDITION: Int {
+enum USE_CONDITION: UInt32 {
     case UC_NONE = 0        // 아무도 사용할 수 없음
     case UC_ANYONE          // 아무나 사용할 수 있음
     case UC_ONE_UNIT        // 지정된 unit_type 만
     case UC_ONE_CLASS       // 지정된 unit_class 만
 }
 
-enum USE_TYPE: Int {
+enum USE_TYPE: UInt32 {
     case UT_NONE = 0        // 장착하는 장비가 아님.
     case UT_SKIN            // 장착하는 장비, 스킨 애니메이션
     case UT_ATTACH_ANIM     // 장착하는 장비, 어태치 애니메이션
     case UT_ATTACH_NORMAL   // 장착하는 장비, 어태치 메시
 }
 
-enum UNIT_TYPE: Int {
+enum UNIT_TYPE: UInt8 {
     case UT_NONE = 0
     case UT_ELSWORD
     case UT_ARME
@@ -35,7 +35,7 @@ enum UNIT_TYPE: Int {
     case UT_END         // 엘리시스가 추가되면 END를 엘리시스 아래로..
 }
 
-enum UNIT_CLASS: Int {
+enum UNIT_CLASS: UInt8 {
     // 초기직업
     case UC_NONE = 0
     case UC_ELSWORD_SWORDMAN
@@ -106,7 +106,7 @@ enum UNIT_CLASS: Int {
     case UC_ADD_LUNATIC_PSYKER = 122    // 루나틱 사이커 - 애드 2차 전직
 }
 
-enum PVP_RANK: Int {
+enum PVP_RANK: UInt8 {
     case PVPRANK_NONE = 0
     case PVPRANK_RANK_ARRANGE
     case PVPRANK_RANK_E
@@ -121,7 +121,7 @@ enum PVP_RANK: Int {
     case PVPRANK_END
 }
 
-enum ITEM_TYPE: Int {
+enum ITEM_TYPE: UInt32 {
     case IT_NONE = 0    // 에러
     case IT_WEAPON      // 무기
     case IT_DEFENCE     // 방어구
@@ -140,7 +140,7 @@ enum ITEM_TYPE: Int {
     case IT_RIDING      // 탈것
 }
 
-enum ITEM_GRADE: Int {
+enum ITEM_GRADE: UInt32 {
     case IG_NONE = 0
     case IG_UNIQUE
     case IG_ELITE
@@ -149,19 +149,19 @@ enum ITEM_GRADE: Int {
     case IG_LOW
 }
 
-enum PERIOD_TYPE: Int {
+enum PERIOD_TYPE: UInt32 {
     case PT_INFINITY = 0    // 무제한
     case PT_ENDURANCE       // 내구도
     case PT_QUANTITY        // 수량성
 }
 
-enum SHOP_PRICE_TYPE: Int {
+enum SHOP_PRICE_TYPE: UInt32 {
     case SPT_NONE = 0   // 팔기 불능
     case SPT_CASH       // 캐쉬
     case SPT_GP         // GP
 }
 
-enum EQIP_POSITION: Int {
+enum EQIP_POSITION: UInt8 {
     case EP_NONE = 0
     case EP_QUICK_SLOT      // 퀵슬롯 아이템
 

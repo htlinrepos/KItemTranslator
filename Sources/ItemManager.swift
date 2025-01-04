@@ -19,22 +19,61 @@ let itemFormatVersion = 0x1201
 /// 持有并管理`data`，读取`SetItemData`和`ItemTemplate`数据，以及共享处理 `data` 的方法
 class ItemManager {
     let data: Data
+    let header: KItemFormatHeader
     
     init(data: Data) {
         self.data = data
-    }
-    
-    var header: KItemFormatHeader? {
-        data.withUnsafeBytes({ ptr -> KItemFormatHeader? in
+        header = data.withUnsafeBytes({ ptr -> KItemFormatHeader in
             // 确保 Data 的大小足够
-            guard ptr.count >= MemoryLayout<KItemFormatHeader>.size else { return nil }
+            guard ptr.count >= MemoryLayout<KItemFormatHeader>.size else {
+                fatalError("Not enough data size.")
+            }
             
             // 将字节数据转换为结构体
             return ptr.load(as: KItemFormatHeader.self)
         })
     }
     
-    func getSetItem(id dwSetID: UInt32, from data: Data) -> KItemFormatSetItemData? {
+    func getItemTemplate(itemID: UInt32) -> KItemFormatTemplet? {
+        guard itemID != 0 else { return nil }
+        // 获取物品数量
+        let dwNumItems = Int(header.m_dwNumItems)
+        
+        guard dwNumItems != 0 else { return nil }
+        // 获取数据指针
+        let pData = data.withUnsafeBytes { $0.baseAddress }
+        
+        guard let pData else { return nil }
+        // 获取物品 ID 数组的起始指针
+        let pdwItemID = pData.advanced(by: itemFormatHeaderSize).assumingMemoryBound(to: UInt32.self)
+        
+        // 使用二分查找找到目标 itemID
+        let itemIDToFind = UInt32(itemID)
+        let pdwFound = pdwItemID.withMemoryRebound(to: UInt32.self, capacity: dwNumItems) { ptr in
+            return ptr.withMemoryRebound(to: UInt32.self, capacity: dwNumItems) { base in
+                let lowerBound = UnsafeBufferPointer(start: base, count: dwNumItems)
+                return lowerBound.firstIndex(where: { $0 == itemIDToFind })
+            }
+        }
+
+        // 检查是否找到目标 itemID
+        guard let foundIndex = pdwFound else {
+            return nil
+        }
+        
+        // 计算目标物品的偏移量
+        let dwIndex = foundIndex
+        let dwItemOffset = MemoryLayout<KItemFormatHeader>.size
+                         + MemoryLayout<UInt32>.size * dwNumItems
+                         + MemoryLayout<KItemFormatTemplet>.size * dwIndex
+        
+        // 返回目标物品的指针
+        return pData.advanced(by: dwItemOffset)
+                    .assumingMemoryBound(to: KItemFormatTemplet.self)
+                    .pointee
+    }
+    
+    func getSetItem(id dwSetID: UInt32) -> KItemFormatSetItemData? {
         // 检查无效的输入条件
         guard dwSetID != 0, data.count >= MemoryLayout<KItemFormatHeader>.size else {
             return nil
