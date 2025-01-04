@@ -4,13 +4,13 @@
 import PackageDescription
 
 let package = Package(
-    name: "KItemDeserializer",
+    name: "KItemTranslator",
     dependencies: [
-        .package(url: "https://github.com/apple/swift-argument-parser", branch: "main"),
+        .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.5.0")
     ],
     targets: [
         .executableTarget(
-            name: "KItemDeserializer",
+            name: "KItemTranslator",
             dependencies: [
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
             ],

@@ -24,24 +24,28 @@ struct Loader {
         }
         
         let formatHeaderSize = MemoryLayout<KItemFormatHeader>.size
+        let formatTemplateSize = MemoryLayout<KItemFormatTemplet>.size
         
         assert(data.count > formatHeaderSize, "验证文件大小失败")
         
-        let itemManager = ItemManager()
+        let itemManager = ItemManager(data: data)
         
-        guard let header = itemManager.createHeader(from: data) else {
+        precondition(itemFormatHeaderSize == formatHeaderSize)
+        precondition(itemFormatTempletSize == formatTemplateSize)
+        
+        guard let header = itemManager.header else {
             print("Failed to create header.")
             return
         }
         
-        assert(header.m_dwMagic == itemManager.itemFormatMagic, "文件头格式错误")
-        assert(header.m_dwVersion == itemManager.itemFormatVersion, "文件头格式错误")
+        assert(header.m_dwMagic == itemFormatMagic, "文件头格式错误")
+        assert(header.m_dwVersion == itemFormatVersion, "文件头格式错误")
         
         print("文件头验证成功")
         
-        let setItemDataExample = itemManager.getSetItem(id: 10, from: data)
-        
-        print(setItemDataExample)
+//        let setItemDataExample = itemManager.getSetItem(id: 10, from: data)!
+//        print(itemManager.getString(offsetBy: setItemDataExample.m_dwOffset_SetName))
+//        print(setItemDataExample.getSetItemNeedPartsNumNOptions(from: data))
     }
     
     func content(path: String) -> Data? {

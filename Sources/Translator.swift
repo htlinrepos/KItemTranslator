@@ -9,7 +9,7 @@ import ArgumentParser
 import Foundation
 
 @main
-struct Deserializer: ParsableCommand {
+struct Translator: ParsableCommand {
     
     @Option(name: [.short, .long], help: "Input kim file path.")
     var input: String

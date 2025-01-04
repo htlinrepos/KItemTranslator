@@ -5,6 +5,8 @@
 //  Created by Erwin Lin on 1/1/25.
 //
 
+import Foundation
+
 let MAX_MODEL_COUNT_A_ITEM = 6
 
 struct KItemFormatHeader {
@@ -21,10 +23,10 @@ struct KItemFormatType_OffsetOrValue {
 
 struct KItemFormatSpecialAbility {
     var m_dwType: UInt32 = 0
-    var m_CoolTime: Int = 0
-    var m_Value1: Int = 0
-    var m_Value2: Int = 0
-    var m_Value3: Int = 0
+    var m_CoolTime: Int32 = 0
+    var m_Value1: Int32 = 0
+    var m_Value2: Int32 = 0
+    var m_Value3: Int32 = 0
     var m_dwOffset_StringValue1: UInt32 = 0
 }
 
@@ -51,28 +53,45 @@ struct KItemFormatStatRelLVData {
 
 struct KItemForamtNeedPartsNumAndOption {
     var m_dwNeedPartsNum: UInt32 = 0
-    var m_iOption: Int = 0
+    var m_iOption: Int32 = 0
 }
 
 struct KItemFormatSetItemData {
     var m_dwSetID: UInt32 = 0
-    var m_iMaxLevel: Int = 0
+    var m_iMaxLevel: Int32 = 0
     var m_dwOffset_SetName: UInt32 = 0
     var m_dwOffset_ItemIDs: UInt32 = 0
     var m_dwOffset_NeedPartsNumNOptions: UInt32 = 0
+    
+    func getSetItemNeedPartsNumNOptions(from data: Data) -> [KItemForamtNeedPartsNumAndOption] {
+        guard m_dwOffset_NeedPartsNumNOptions != 0 else { return [] }
+        let offset = Int(m_dwOffset_NeedPartsNumNOptions)
+        let dwNum = data.withUnsafeBytes { $0.load(fromByteOffset: offset, as: UInt32.self) }
+        
+        guard dwNum != 0 else { return [] }
+        let pData = data.withUnsafeBytes { $0.baseAddress }
+        
+        guard let pData = pData else { return [] }
+        let furtherOffset = offset + dwordSize
+        let needPartsNumAndOptionsPtr = pData
+            .advanced(by: furtherOffset)
+            .assumingMemoryBound(to: KItemForamtNeedPartsNumAndOption.self)
+        let needPartsNumAndOptions = UnsafeBufferPointer(start: needPartsNumAndOptionsPtr, count: Int(dwNum))
+        return Array(needPartsNumAndOptions)
+    }
 }
 
 struct KItemFormatTemplet {
     var m_dwItemID: UInt32 = 0
     var m_dwFlags: UInt32 = 0
     var m_dwFlags2: UInt32 = 0
-    var m_iItemLevel: Int = 0
-    var m_iQuantity: Int = 0
+    var m_iItemLevel: Int32 = 0
+    var m_iQuantity: Int32 = 0
     var m_fRepairED: Float = 0
-    var m_iRepairVP: Int = 0
-    var m_iPrice: Int = 0
+    var m_iRepairVP: Int32 = 0
+    var m_iPrice: Int32 = 0
     var m_iPricePvPPoint: Int = 0
-    var m_iSetID: Int = 0
+    var m_iSetID: Int32 = 0
     var m_fAddMaxMP: Float = 0
     var m_dwOffset_Name: UInt32 = 0
     var m_dwOffset_Description: UInt32 = 0
@@ -114,6 +133,8 @@ struct KItemFormatTemplet {
     var m_byNumCommonItemModelNames: UInt8 = 0
     var m_byNumCommonItemXETNames: UInt8 = 0
     var m_byNumSlashTraces: UInt8 = 0
+    
+    
 }
 
 struct EFlags {
