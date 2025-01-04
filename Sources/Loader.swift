@@ -40,12 +40,14 @@ struct Loader {
         print("文件头验证成功")
         
         let itemSets = deserializer.itemSets()
-        let setItemDataExample = itemSets.first!
-        print(deserializer.getString(offsetBy: setItemDataExample.m_dwOffset_SetName))
+        let preItemSets = itemSets[0..<5].flatMap {
+            $0.toSetItemData(with: deserializer)
+        }
+        print(preItemSets)
         
-        let itemTemplates = deserializer.itemTemplates()
-        let itemTemplateExample = itemTemplates.first!
-        print(deserializer.getString(offsetBy: itemTemplateExample.m_dwOffset_Name))
+//        let itemTemplates = deserializer.itemTemplates()
+//        let itemTemplateExample = itemTemplates.first!
+//        print(deserializer.getString(offsetBy: itemTemplateExample.m_dwOffset_Name))
     }
     
     func content(path: String) -> Data? {

@@ -79,6 +79,32 @@ struct KItemFormatSetItemData {
         let needPartsNumAndOptions = UnsafeBufferPointer(start: needPartsNumAndOptionsPtr, count: Int(dwNum))
         return Array(needPartsNumAndOptions)
     }
+    
+    func toSetItemData(with deserializer: Deserializer) -> [SetItemData] {
+        let needPartsToOptions = convertToDictionary(items: getSetItemNeedPartsNumNOptions(from: deserializer.data))
+        return needPartsToOptions.keys.sorted().map {
+            SetItemData(m_SetID: m_dwSetID.toInt(),
+                        m_SetName: deserializer.getString(offsetBy: m_dwOffset_SetName),
+                        m_mapNeedPartsNumNOptions: [$0: needPartsToOptions[$0] ?? []])
+        }
+    }
+    
+    func convertToDictionary(items: [KItemForamtNeedPartsNumAndOption]) -> [Int: [Int]] {
+        var result: [Int: [Int]] = [:]
+        
+        for item in items {
+            // 如果字典中已经有该键，则追加到数组中
+            if var options = result[item.m_dwNeedPartsNum.toInt()] {
+                options.append(item.m_iOption.toInt())
+                result[item.m_dwNeedPartsNum.toInt()] = options
+            } else {
+                // 否则，创建一个新数组
+                result[item.m_dwNeedPartsNum.toInt()] = [item.m_iOption.toInt()]
+            }
+        }
+        
+        return result
+    }
 }
 
 struct KItemFormatTemplet {
