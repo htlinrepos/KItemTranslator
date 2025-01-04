@@ -34,81 +34,62 @@ class ItemManager {
         })
     }
     
-    func getItemTemplate(itemID: UInt32) -> KItemFormatTemplet? {
-        guard itemID != 0 else { return nil }
+    func itemTemplates() -> [KItemFormatTemplet] {
         // 获取物品数量
         let dwNumItems = Int(header.m_dwNumItems)
         
-        guard dwNumItems != 0 else { return nil }
+        guard dwNumItems != 0 else { return [] }
         // 获取数据指针
         let pData = data.withUnsafeBytes { $0.baseAddress }
         
-        guard let pData else { return nil }
-        // 获取物品 ID 数组的起始指针
-        let pdwItemID = pData.advanced(by: itemFormatHeaderSize).assumingMemoryBound(to: UInt32.self)
+        guard let pData else { return [] }
+        // 计算物品模板数组的起始指针
+        let pTemplates = pData.advanced(by: itemFormatHeaderSize + dwordSize * dwNumItems)
+                              .assumingMemoryBound(to: KItemFormatTemplet.self)
         
-        // 使用二分查找找到目标 itemID
-        let itemIDToFind = UInt32(itemID)
-        let pdwFound = pdwItemID.withMemoryRebound(to: UInt32.self, capacity: dwNumItems) { ptr in
-            return ptr.withMemoryRebound(to: UInt32.self, capacity: dwNumItems) { base in
-                let lowerBound = UnsafeBufferPointer(start: base, count: dwNumItems)
-                return lowerBound.firstIndex(where: { $0 == itemIDToFind })
-            }
-        }
-
-        // 检查是否找到目标 itemID
-        guard let foundIndex = pdwFound else {
-            return nil
+        // 创建结果数组
+        var templates = [KItemFormatTemplet]()
+        
+        // 遍历所有物品模板
+        for i in 0..<dwNumItems {
+            let template = pTemplates.advanced(by: i).pointee
+            templates.append(template)
         }
         
-        // 计算目标物品的偏移量
-        let dwIndex = foundIndex
-        let dwItemOffset = MemoryLayout<KItemFormatHeader>.size
-                         + MemoryLayout<UInt32>.size * dwNumItems
-                         + MemoryLayout<KItemFormatTemplet>.size * dwIndex
-        
-        // 返回目标物品的指针
-        return pData.advanced(by: dwItemOffset)
-                    .assumingMemoryBound(to: KItemFormatTemplet.self)
-                    .pointee
+        return templates
     }
     
-    func getSetItem(id dwSetID: UInt32) -> KItemFormatSetItemData? {
-        // 检查无效的输入条件
-        guard dwSetID != 0, data.count >= MemoryLayout<KItemFormatHeader>.size else {
-            return nil
+    func itemSets() -> [KItemFormatSetItemData] {
+        // 检查数据是否足够解析 Header
+        guard data.count >= itemFormatHeaderSize else {
+            return []
         }
-
         // 取出数据起始指针
         let pData = data.withUnsafeBytes { $0.baseAddress }
-        guard let pData = pData else { return nil }
-
+        
+        guard let pData = pData else { return [] }
         // 解析 Header
         let pkHeader = pData.bindMemory(to: KItemFormatHeader.self, capacity: 1).pointee
         let dwNumSetIDs = pkHeader.m_dwNumSetIDs
 
         // 计算初始偏移量
-        let dwOffset = MemoryLayout<KItemFormatHeader>.size +
-            Int(pkHeader.m_dwNumItems) * (MemoryLayout<UInt32>.size + MemoryLayout<KItemFormatTemplet>.size)
+        let dwOffset = itemFormatHeaderSize + Int(pkHeader.m_dwNumItems) * (dwordSize + itemFormatTempletSize)
 
-        // 获取 SetID 数组的指针
-        let pdwSetIDPointer = pData.advanced(by: dwOffset).bindMemory(to: UInt32.self, capacity: Int(dwNumSetIDs))
-        let pdwSetIDs = UnsafeBufferPointer(start: pdwSetIDPointer, count: Int(dwNumSetIDs))
+        // 计算套装数据的起始指针
+        let pSetItems = pData
+            .advanced(by: dwOffset + Int(dwNumSetIDs) * dwordSize)
+            .bindMemory(to: KItemFormatSetItemData.self, capacity: Int(dwNumSetIDs))
 
-        // 在数组中查找目标 SetID
-        guard let index = pdwSetIDs.firstIndex(of: dwSetID) else {
-            assertionFailure("SetID not found")
-            return nil
+        // 创建结果数组
+        var setItems = [KItemFormatSetItemData]()
+
+        // 遍历所有套装数据
+        for i in 0..<Int(dwNumSetIDs) {
+            let setItem = pSetItems.advanced(by: i).pointee
+            setItems.append(setItem)
         }
 
-        // 计算最终偏移量
-        let finalOffset = dwOffset +
-            Int(dwNumSetIDs) * MemoryLayout<UInt32>.size +
-            index * MemoryLayout<KItemFormatSetItemData>.size
-
-        // 获取最终结果指针
-        let resultPointer = pData.advanced(by: finalOffset).bindMemory(to: KItemFormatSetItemData.self, capacity: 1)
-        return resultPointer.pointee
+        return setItems
     }
 }
 

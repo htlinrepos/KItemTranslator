@@ -39,14 +39,13 @@ struct Loader {
         
         print("文件头验证成功")
         
-//        let setItemDataExample = itemManager.getSetItem(id: 10, from: data)!
-//        print(itemManager.getString(offsetBy: setItemDataExample.m_dwOffset_SetName))
-//        print(setItemDataExample.getSetItemNeedPartsNumNOptions(from: data))
+        let itemSets = itemManager.itemSets()
+        let setItemDataExample = itemSets.first!
+        print(itemManager.getString(offsetBy: setItemDataExample.m_dwOffset_SetName))
         
-        let itemTemplateExample = itemManager.getItemTemplate(itemID: 1)!
+        let itemTemplates = itemManager.itemTemplates()
+        let itemTemplateExample = itemTemplates.first!
         print(itemManager.getString(offsetBy: itemTemplateExample.m_dwOffset_Name))
-        
-        
     }
     
     func content(path: String) -> Data? {
