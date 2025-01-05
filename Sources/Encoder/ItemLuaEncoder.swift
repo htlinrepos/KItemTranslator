@@ -119,8 +119,15 @@ struct ILuaKeyedEncodingContainer<Key: CodingKey>: KeyedEncodingContainerProtoco
             codingString.append(string)
         case let value as [SpecialAbility]:
             guard !value.isEmpty else { break }
-            // TODO: -
-            
+            let kvEncoder = KeyValueEncoder(padding: padding + padding)
+            try value.encode(to: kvEncoder)
+            let string = """
+            \(padding)\(key.stringValue) =
+            \(padding){
+            \(kvEncoder.storage.dropLast())
+            \(padding)}\n
+            """
+            codingString.append(string)
         case let value as [Int]:
             guard !value.isEmpty else { break }
             let string = """

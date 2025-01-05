@@ -342,12 +342,34 @@ struct Stat: Encodable, Equatable {
     }
 }
 
-struct SpecialAbility: Encodable {
-    var m_Type: SPECIAL_ABILITY_TYPE = .SAT_NONE
-    var m_CoolTime: Int = 0
-    var m_Value1: Int = 0
-    var m_Value2: Int = 0
-    var m_Value3: Int = 0
+struct SpecialAbility: Encodable, Equatable {
+    static let `default` = SpecialAbility()
+    
+    let m_Type: SPECIAL_ABILITY_TYPE
+    let m_CoolTime: Int
+    let m_Value1: Int
+    let m_Value2: Int
+    let m_Value3: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case m_Type = "TYPE"
+        case m_CoolTime = "COOL_TIME"
+        case m_Value1 = "VALUE1"
+        case m_Value2 = "VALUE2"
+        case m_Value3 = "VALUE3"
+    }
+    
+    init(m_Type: SPECIAL_ABILITY_TYPE = .SAT_NONE,
+         m_CoolTime: Int = 0,
+         m_Value1: Int = 0,
+         m_Value2: Int = 0,
+         m_Value3: Int = 0) {
+        self.m_Type = m_Type
+        self.m_CoolTime = m_CoolTime
+        self.m_Value1 = m_Value1
+        self.m_Value2 = m_Value2
+        self.m_Value3 = m_Value3
+    }
     
     init(format: KItemFormatSpecialAbility) {
         m_Type = .init(rawValue: format.m_dwType)!
@@ -356,8 +378,6 @@ struct SpecialAbility: Encodable {
         m_Value2 = format.m_Value2.toInt()
         m_Value3 = format.m_Value3.toInt()
     }
-    
-    init() { }
 }
 
 enum SPECIAL_ABILITY_TYPE: UInt32, Encodable {
@@ -506,4 +526,64 @@ struct SetItemData: Encodable {
     var m_SetID: Int = 0        // 세트 ID
     var m_SetName: String = ""  // 세트 이름
     var m_mapNeedPartsNumNOptions: [Int: [Int]] = [:]   // 필요한 파츠 수와 옵션을 매핑한 딕셔너리
+    
+    enum CodingKeys: String, CodingKey {
+        case m_SetID
+        case m_SetName
+        case m_mapNeedPartsNumNOptions = "m_NeedPartsNum"
+    }
+}
+
+extension ItemTemplet {
+   enum CodingKeys: String, CodingKey {
+       case m_ItemID
+       case m_Name
+       case m_Description
+       case m_DescriptionInShop
+       case m_ModelName
+       case m_TextureChangeXETName
+       case m_AniXETName
+       case m_AniName
+       case m_ShopImage
+       case m_DropViewer
+       case m_ItemType
+       case m_ItemGrade
+       case m_bFashion
+       case m_bVested
+       case m_bCanEnchant
+       case m_bCanUseInventory
+       case m_bNoEquip
+       case m_bIsPcBang = "m_bPcBang"
+       case m_iItemLevel = "m_ItemLevel"
+       case m_ucMaxSealCount
+       case m_iMaxAttribEnchantCount
+       case m_UseType
+       case m_AttachFrameName
+       case m_bCanHyperMode
+       case m_PeriodType
+       case m_Endurance
+       case m_EnduranceDamageMin
+       case m_EnduranceDamageMax
+       case m_RepairED
+       case m_RepairVP
+       case m_Quantity
+       case m_PriceType
+       case m_Price
+       case m_PricePvPPoint
+       case m_UseCondition
+       case m_UnitType
+       case m_UnitClass
+       case m_UseLevel
+       case m_BuyPvpRankCondition
+       case m_EqipPosition
+       case m_Stat
+       case m_SpecialAbilityList
+       case m_vecSocketOption = "SOCKET_OPTION"
+       case m_vecRandomSocketGroupID = "RANDOM_SOCKET_GROUP_ID"
+       case m_kStatRelationLevel = "m_Stat_Relation_Level"
+       case m_CoolTime
+       case m_SetID
+       case m_iAttributeLevel
+       case m_iBuffFactorID
+   }
 }

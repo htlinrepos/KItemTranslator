@@ -17,12 +17,40 @@ class SetItemLuaEncoderTests: XCTestCase {
         SetItemData(m_SetID: 10, m_SetName: "Red Giant Set", m_mapNeedPartsNumNOptions: [4: [30005, 30015]]),
         SetItemData(m_SetID: 10, m_SetName: "Red Giant Set", m_mapNeedPartsNumNOptions: [5: [30005, 30015, 30020]])
     ]
+    
+    let targetCode = """
+    g_pCX2SetItemManager:AddSetItemData_LUA
+    {
+        m_SetID = 10,
+        m_SetName = "Red Giant Set",
+        m_NeedPartsNum = 2,
+        m_Option1 = 30005,
+    }
+
+    g_pCX2SetItemManager:AddSetItemData_LUA
+    {
+        m_SetID = 10,
+        m_SetName = "Red Giant Set",
+        m_NeedPartsNum = 4,
+        m_Option1 = 30005,
+        m_Option2 = 30015,
+    }
+
+    g_pCX2SetItemManager:AddSetItemData_LUA
+    {
+        m_SetID = 10,
+        m_SetName = "Red Giant Set",
+        m_NeedPartsNum = 5,
+        m_Option1 = 30005,
+        m_Option2 = 30015,
+        m_Option3 = 30020,
+    }
+    """
 
     let siEncoder = SetItemLuaEncoder()
     
     func testEncode() {
         try? itemSets.encode(to: siEncoder)
-        XCTAssertFalse(siEncoder.luaCode.isEmpty)
-        print(siEncoder.luaCode)
+        XCTAssertEqual(String(siEncoder.luaCode.dropLast(2)), targetCode)
     }
 }
