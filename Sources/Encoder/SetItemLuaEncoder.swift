@@ -10,7 +10,11 @@ class SetItemLuaEncoder: Encoder {
     var userInfo: [CodingUserInfoKey: Any] = [:]
     
     // 存储编码后的 Lua 代码
-    private(set) var luaCode: String = ""
+    private var luaCode: String = ""
+    
+    var code: String {
+        String(luaCode.dropLast(2))
+    }
     
     // 返回一个容器，用于编码键值对
     func container<Key: CodingKey>(keyedBy type: Key.Type) -> KeyedEncodingContainer<Key> {
@@ -67,6 +71,7 @@ struct SILuaKeyedEncodingContainer<Key: CodingKey>: KeyedEncodingContainerProtoc
             }
             encoder.appendLuaCode(template)
         default:
+            printError(value)
             break
         }
     }
@@ -86,6 +91,8 @@ struct SILuaUnKeyedEncodingContainer: UnkeyedEncodingContainer {
     func encode<T: Encodable>(_ value: T) throws where T : Encodable {
         if let value = value as? SetItemData {
             try value.encode(to: encoder)
+        } else {
+            printError(value)
         }
     }
 }

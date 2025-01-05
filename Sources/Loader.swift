@@ -39,15 +39,15 @@ struct Loader {
         
         print("文件头验证成功")
         
-//        let itemSets = deserializer.itemSets()
-//        let preItemSets = itemSets[0..<5].flatMap {
-//            $0.toSetItemData(with: deserializer)
-//        }
-//        print(preItemSets)
+        let itemSets = deserializer.itemSets().flatMap {
+            $0.toSetItemData(with: deserializer)
+        }
         
-        let itemTemplates = deserializer.itemTemplates()
-        let itemTemplateExample = itemTemplates.first(where: { $0.m_dwItemID.toInt() == 30154 })
-        print(itemTemplateExample?.toItemTemplate(with: deserializer))
+        let itemTemplates = deserializer.itemTemplates().map {
+            $0.toItemTemplate(with: deserializer)
+        }
+        
+        
     }
     
     func content(path: String) -> Data? {
@@ -59,4 +59,9 @@ struct Loader {
         }
     }
     
+}
+
+func printError<T>(_ value: T) {
+    print("!!!!!!!!!!!! Error !!!!!!!!!!!!!!!")
+    print("           \(value)")
 }

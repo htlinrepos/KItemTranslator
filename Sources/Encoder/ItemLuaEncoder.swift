@@ -10,7 +10,11 @@ class ItemLuaEncoder: Encoder {
     var userInfo: [CodingUserInfoKey : Any] = [:]
     
     // 存储编码后的 Lua 代码
-    private(set) var luaCode: String = ""
+    private var luaCode: String = ""
+    
+    var code: String {
+        String(luaCode.dropLast(2))
+    }
     
     // 添加 Lua 代码
     func appendLuaCode(_ code: String) {
@@ -49,8 +53,6 @@ struct ILuaKeyedEncodingContainer<Key: CodingKey>: KeyedEncodingContainerProtoco
     let padding = "    "
     
     mutating func encode<T>(_ value: T, forKey key: Key) throws where T : Encodable {
-        print("Encoding value: \(value)")
-        
         defer {
             if key.stringValue == "m_iBuffFactorID" {
                 codingString.removeLast()
@@ -61,6 +63,9 @@ struct ILuaKeyedEncodingContainer<Key: CodingKey>: KeyedEncodingContainerProtoco
         switch value {
         case let value as Int:
             guard value != 0 else { break }
+            codingString.append("\(padding)\(key.stringValue) = \(value),\n")
+        case let value as Float:
+            guard value != 0.0 else { break }
             codingString.append("\(padding)\(key.stringValue) = \(value),\n")
         case let value as String:
             guard !value.isEmpty else { break }
@@ -113,7 +118,7 @@ struct ILuaKeyedEncodingContainer<Key: CodingKey>: KeyedEncodingContainerProtoco
             let string = """
             \(padding)\(key.stringValue) =
             \(padding){
-            \(kvEncoder.storage)
+            \(kvEncoder.code)
             \(padding)},
             """
             codingString.append(string)
@@ -124,7 +129,7 @@ struct ILuaKeyedEncodingContainer<Key: CodingKey>: KeyedEncodingContainerProtoco
             let string = """
             \(padding)\(key.stringValue) =
             \(padding){
-            \(kvEncoder.storage.dropLast())
+            \(kvEncoder.code)
             \(padding)}\n
             """
             codingString.append(string)
@@ -141,12 +146,12 @@ struct ILuaKeyedEncodingContainer<Key: CodingKey>: KeyedEncodingContainerProtoco
             let string = """
             \(padding)\(key.stringValue) =
             \(padding){
-            \(kvEncoder.storage.dropLast())
+            \(kvEncoder.code)
             \(padding)},
             """
             codingString.append(string)
         default:
-            print("!!!!!!!!!!!! Error !!!!!!!!!!!!!!!")
+            printError(value)
             break
         }
     }

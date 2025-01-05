@@ -51,6 +51,6 @@ class SetItemLuaEncoderTests: XCTestCase {
     
     func testEncode() {
         try? itemSets.encode(to: siEncoder)
-        XCTAssertEqual(String(siEncoder.luaCode.dropLast(2)), targetCode)
+        XCTAssertEqual(siEncoder.code, targetCode)
     }
 }

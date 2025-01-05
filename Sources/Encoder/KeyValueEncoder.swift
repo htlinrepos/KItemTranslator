@@ -11,7 +11,11 @@ class KeyValueEncoder: Encoder {
     var codingPath: [CodingKey] = []
     var userInfo: [CodingUserInfoKey : Any] = [:]
     
-    private(set) var storage: String = ""
+    private var storage: String = ""
+    
+    var code: String {
+        String(storage.dropLast())
+    }
     
     let padding: String
     
@@ -55,8 +59,9 @@ struct KeyValueKeyedEncodingContainer<Key: CodingKey>: KeyedEncodingContainerPro
             encoder.appendWithPadding("\(key.stringValue) = \(value),\n")
         case let value as SPECIAL_ABILITY_TYPE:
             guard value != .SAT_NONE else { break }
-            encoder.appendWithPadding("\(key.stringValue) = \(value),\n")
+            encoder.appendWithPadding("\(key.stringValue) = SPECIAL_ABILITY_TYPE[\"\(value)\"],\n")
         default:
+            printError(value)
             break
         }
     }
@@ -81,10 +86,12 @@ struct KeyValueUnKeyedEncoding: UnkeyedEncodingContainer {
             try value.encode(to: encoder)
             let string = """
             \(padding){
-            \(encoder.storage.dropLast())
+            \(encoder.code)
             \(padding)},\n
             """
             self.encoder.append(string)
+        } else {
+            printError(value)
         }
     }
 }

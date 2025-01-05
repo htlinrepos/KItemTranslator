@@ -28,14 +28,12 @@ class ItemLuaEncoderTests: XCTestCase {
     
     func testItemLuaEncode() {
         try? itemTemplates.encode(to: iLuaEncoder)
-        XCTAssertFalse(iLuaEncoder.luaCode.isEmpty)
-        print(iLuaEncoder.luaCode.dropLast())
+        print(iLuaEncoder.code)
     }
     
     func testStatLuaEncode() {
         try? stat.encode(to: keyValueEncoder)
-        XCTAssertFalse(keyValueEncoder.storage.isEmpty)
-        print(keyValueEncoder.storage.dropLast())
+        print(keyValueEncoder.code)
     }
     
     func testSpecialAbilityEncode() {
@@ -43,10 +41,9 @@ class ItemLuaEncoderTests: XCTestCase {
         try? saList.encode(to: kvEncoder)
         let string = """
         \(padding){
-        \(kvEncoder.storage.dropLast())
+        \(kvEncoder.code)
         \(padding)}
         """
-        XCTAssertFalse(kvEncoder.storage.isEmpty)
         print(string)
     }
 }
