@@ -7,6 +7,12 @@
 
 import Foundation
 
+extension Int {
+    func toUInt8() -> UInt8 {
+        UInt8(self)
+    }
+}
+
 extension UInt32 {
     func toInt() -> Int {
         Int(self)
@@ -14,6 +20,12 @@ extension UInt32 {
 }
 
 extension Int32 {
+    func toInt() -> Int {
+        Int(self)
+    }
+}
+
+extension Int16 {
     func toInt() -> Int {
         Int(self)
     }

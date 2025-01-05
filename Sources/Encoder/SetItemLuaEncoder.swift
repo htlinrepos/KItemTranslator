@@ -14,17 +14,12 @@ class SetItemLuaEncoder: Encoder {
     
     // 返回一个容器，用于编码键值对
     func container<Key: CodingKey>(keyedBy type: Key.Type) -> KeyedEncodingContainer<Key> {
-        return KeyedEncodingContainer(SILuaKeyedEncodingContainer<Key>(encoder: self))
+        KeyedEncodingContainer(SILuaKeyedEncodingContainer<Key>(encoder: self))
     }
     
     // 返回一个容器，用于编码无键值对（例如数组）
     func unkeyedContainer() -> UnkeyedEncodingContainer {
-        return SILuaUnKeyedEncodingContainer(encoder: self)
-    }
-    
-    // 返回一个容器，用于编码单个值
-    func singleValueContainer() -> SingleValueEncodingContainer {
-        fatalError("Single value encoding is not supported by LuaEncoder")
+        SILuaUnKeyedEncodingContainer(encoder: self)
     }
     
     // 添加 Lua 代码
@@ -75,23 +70,6 @@ struct SILuaKeyedEncodingContainer<Key: CodingKey>: KeyedEncodingContainerProtoc
             break
         }
     }
-    
-    // 其他方法（未实现）
-    mutating func encodeNil(forKey key: Key) throws {
-        fatalError("Nil value is not supported")
-    }
-    mutating func nestedContainer<NestedKey: CodingKey>(keyedBy keyType: NestedKey.Type, forKey key: Key) -> KeyedEncodingContainer<NestedKey> {
-        fatalError("Nested containers are not supported")
-    }
-    mutating func nestedUnkeyedContainer(forKey key: Key) -> UnkeyedEncodingContainer {
-        fatalError("Unkeyed containers are not supported")
-    }
-    mutating func superEncoder() -> Encoder {
-        fatalError("Super encoder is not supported")
-    }
-    mutating func superEncoder(forKey key: Key) -> Encoder {
-        fatalError("Super encoder is not supported")
-    }
 }
 
 struct SILuaUnKeyedEncodingContainer: UnkeyedEncodingContainer {
@@ -109,18 +87,5 @@ struct SILuaUnKeyedEncodingContainer: UnkeyedEncodingContainer {
         if let value = value as? SetItemData {
             try value.encode(to: encoder)
         }
-    }
-    
-    mutating func encodeNil() throws {
-        fatalError("Nil value is not supported")
-    }
-    mutating func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type) -> KeyedEncodingContainer<NestedKey> where NestedKey : CodingKey {
-        fatalError("Nested containers are not supported")
-    }
-    mutating func nestedUnkeyedContainer() -> any UnkeyedEncodingContainer {
-        fatalError("Unkeyed containers are not supported")
-    }
-    mutating func superEncoder() -> any Encoder {
-        fatalError("Super encoder is not supported")
     }
 }

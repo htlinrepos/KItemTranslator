@@ -20,7 +20,7 @@ class SetItemLuaEncoderTests: XCTestCase {
 
     let siEncoder = SetItemLuaEncoder()
     
-    func testEncoding() {
+    func testEncode() {
         try? itemSets.encode(to: siEncoder)
         XCTAssertFalse(siEncoder.luaCode.isEmpty)
         print(siEncoder.luaCode)

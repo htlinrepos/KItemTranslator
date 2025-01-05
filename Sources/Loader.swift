@@ -39,15 +39,15 @@ struct Loader {
         
         print("文件头验证成功")
         
-        let itemSets = deserializer.itemSets()
-        let preItemSets = itemSets[0..<5].flatMap {
-            $0.toSetItemData(with: deserializer)
-        }
-        print(preItemSets)
+//        let itemSets = deserializer.itemSets()
+//        let preItemSets = itemSets[0..<5].flatMap {
+//            $0.toSetItemData(with: deserializer)
+//        }
+//        print(preItemSets)
         
-//        let itemTemplates = deserializer.itemTemplates()
-//        let itemTemplateExample = itemTemplates.first!
-//        print(deserializer.getString(offsetBy: itemTemplateExample.m_dwOffset_Name))
+        let itemTemplates = deserializer.itemTemplates()
+        let itemTemplateExample = itemTemplates.first(where: { $0.m_dwItemID.toInt() == 30154 })
+        print(itemTemplateExample?.toItemTemplate(with: deserializer))
     }
     
     func content(path: String) -> Data? {

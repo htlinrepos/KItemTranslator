@@ -7,21 +7,114 @@
 
 import Foundation
 
-enum USE_CONDITION: UInt32 {
+enum BUFF_FACTOR_ID: Int {
+    case BFI_NONE = 0
+    case BFI_HYPER_MODE = 1
+    
+    case BFI_DEBUFF_SIDE_EFFECT_MEDICINE = 67
+    case BFI_DEBUFF_SIDE_EFFECT_CREST = 68
+    
+    case BFI_DEBUFF_BIND = 73
+    case BFI_DEBUFF_BIND_WITH_MEMO = 74
+    case BFI_DEBUFF_DEATH_SENTENCE = 75
+    
+    case BFI_CALM_REST = 78
+    
+    case BFI_DEBUFF_SI_P_EIS_MIND_OF_FIGHTER = 80
+    case BFI_BUFF_OVER_HEAT = 84
+    
+    case BFI_BUFF_RETURN_OF_HERO = 114
+    
+    case BFI_BUFF_PET_AURA_SKILL_LEVEL_1_DEFAULT = 125
+    
+    case BFI_BUFF_PET_AURA_SKILL_LEVEL_2_DEFAULT = 130
+    
+    case BFI_BUFF_PET_AURA_SKILL_LEVEL_3_DEFAULT = 135
+    
+    case BFI_BUFF_MECHANIZATION_SPEED_UP = 141
+    
+    case BFI_BUFF_HENIR_FIRE = 147
+    case BFI_BUFF_HENIR_WATER = 148
+    case BFI_BUFF_HENIR_NATURE = 149
+    case BFI_BUFF_HENIR_WIND = 150
+    case BFI_BUFF_HENIR_LIGHT = 151
+    
+    case BFI_EMPTY_EXP_BUFF = 154
+    
+    case BFI_ARA_FULL_HYPER_MODE = 156
+    
+    case BFI_BUFF_BREAKING_MEMO = 181
+    
+    case BFI_BUFF_SUPER_AMOR_FOR_RIDING = 199
+    
+    case BFI_BUFF_TRADE_BLOCK = 205
+    case BFI_RIDING_SCORPION_ENERGY_SWORD = 206
+    
+    case BFI_BUFF_OVER_HEAT_ENHANCE = 217
+    
+    case BFI_BUFF_VICTORIOUS_SWORD = 233
+    
+    case BFI_BUFF_GALE_WAY_OF_SWORD = 237
+    
+    case BFI_BUFF_GALE_MP_GAIN_INCREASE = 245
+    case BFI_BUFF_ANNIHILATION_WAY_OF_SWORD = 246
+    case BFI_BUFF_ANNIHILATION_WAY_OF_SWORD_PVP = 247
+    case BFI_BUFF_ANNIHILATION_SUPER_ARMOR = 248
+    
+    case BFI_BUFF_SI_A_ALD_REFLECTION = 259
+    
+    case BFI_DEBUFF_SELF_PROTECTION_FORTITUDE = 264
+    
+    case BFI_DEBUFF_TELEPORT_CONSUME_MP = 290
+    case BFI_DEBUFF_STIGMA_OF_FIRE = 291
+    case BFI_DEBUFF_JUDGEMENT_FIRE = 292
+    
+    case BFI_BUFF_FIRE_BLOSSOMS = 295
+    
+    case BFI_DEBUFF_HIGH_FEVER = 300
+    case BFI_DEBUFF_FLAME_SWORD = 301
+    case BFI_BUFF_2013_DEFENCE_ENTER_100_PERCENT_BUFF = 302
+    
+    case BFI_DEBUFF_JUDGEMENT_FIRE2 = 307
+    
+    case BFI_FORMATION_MODE = 315
+    
+    case BFI_BUFF_SI_A_ALD_REFLECTION_MEMO = 334
+    
+    case BFI_BUFF_SWORD_ENCHANT_CHARGE_MP = 338
+    
+    case BFI_BUFF_SGM_VICTORIOUS_SWORD = 345
+    case BFI_BUFF_LIBRARY_OF_LIMITLESS_MANA_RECOVERY = 346
+    case BFI_DEBUFF_MIND_BREAK = 347
+    case BFI_DEBUFF_EMP_SHOCK_NEAR = 348
+    case BFI_DEBUFF_EMP_SHOCK_FAR = 349
+    
+    case BFI_NASOD_ARMOR = 353
+    
+    case BFI_BUFF_NATURAL_FORCE = 355
+    case BFI_BUFF_POWER_EXCHANGER_HALF_UP = 356
+    case BFI_BUFF_POWER_EXCHANGER_HALF_DOWN = 357
+    case BFI_DEBUFF_PLASMA_LINK = 358
+    case BFI_BUFF_QUICKSILVER_FRENZY = 359
+    
+    case BFI_BUFF_NAVER = 361
+}
+
+enum USE_CONDITION: UInt32, Encodable {
     case UC_NONE = 0        // 아무도 사용할 수 없음
     case UC_ANYONE          // 아무나 사용할 수 있음
     case UC_ONE_UNIT        // 지정된 unit_type 만
     case UC_ONE_CLASS       // 지정된 unit_class 만
 }
 
-enum USE_TYPE: UInt32 {
+enum USE_TYPE: UInt32, Encodable {
     case UT_NONE = 0        // 장착하는 장비가 아님.
     case UT_SKIN            // 장착하는 장비, 스킨 애니메이션
     case UT_ATTACH_ANIM     // 장착하는 장비, 어태치 애니메이션
     case UT_ATTACH_NORMAL   // 장착하는 장비, 어태치 메시
 }
 
-enum UNIT_TYPE: UInt8 {
+enum UNIT_TYPE: UInt8, Encodable {
     case UT_NONE = 0
     case UT_ELSWORD
     case UT_ARME
@@ -35,7 +128,7 @@ enum UNIT_TYPE: UInt8 {
     case UT_END         // 엘리시스가 추가되면 END를 엘리시스 아래로..
 }
 
-enum UNIT_CLASS: UInt8 {
+enum UNIT_CLASS: UInt8, Encodable {
     // 초기직업
     case UC_NONE = 0
     case UC_ELSWORD_SWORDMAN
@@ -106,7 +199,7 @@ enum UNIT_CLASS: UInt8 {
     case UC_ADD_LUNATIC_PSYKER = 122    // 루나틱 사이커 - 애드 2차 전직
 }
 
-enum PVP_RANK: UInt8 {
+enum PVP_RANK: UInt8, Encodable {
     case PVPRANK_NONE = 0
     case PVPRANK_RANK_ARRANGE
     case PVPRANK_RANK_E
@@ -121,7 +214,7 @@ enum PVP_RANK: UInt8 {
     case PVPRANK_END
 }
 
-enum ITEM_TYPE: UInt32 {
+enum ITEM_TYPE: UInt32, Encodable {
     case IT_NONE = 0    // 에러
     case IT_WEAPON      // 무기
     case IT_DEFENCE     // 방어구
@@ -140,7 +233,7 @@ enum ITEM_TYPE: UInt32 {
     case IT_RIDING      // 탈것
 }
 
-enum ITEM_GRADE: UInt32 {
+enum ITEM_GRADE: UInt32, Encodable {
     case IG_NONE = 0
     case IG_UNIQUE
     case IG_ELITE
@@ -149,19 +242,19 @@ enum ITEM_GRADE: UInt32 {
     case IG_LOW
 }
 
-enum PERIOD_TYPE: UInt32 {
+enum PERIOD_TYPE: UInt32, Encodable {
     case PT_INFINITY = 0    // 무제한
     case PT_ENDURANCE       // 내구도
     case PT_QUANTITY        // 수량성
 }
 
-enum SHOP_PRICE_TYPE: UInt32 {
+enum SHOP_PRICE_TYPE: UInt32, Encodable {
     case SPT_NONE = 0   // 팔기 불능
     case SPT_CASH       // 캐쉬
     case SPT_GP         // GP
 }
 
-enum EQIP_POSITION: UInt8 {
+enum EQIP_POSITION: UInt8, Encodable {
     case EP_NONE = 0
     case EP_QUICK_SLOT      // 퀵슬롯 아이템
 
@@ -215,27 +308,59 @@ enum EQIP_POSITION: UInt8 {
     case EP_END
 }
 
-struct Stat {
-    var m_fBaseHP: Float = 0.0
+struct Stat: Encodable, Equatable {
+    static let `default` = Stat()
+    
+    let m_fBaseHP: Float
 
     // 공격
-    var m_fAtkPhysic: Float = 0.0
-    var m_fAtkMagic: Float = 0.0
+    let m_fAtkPhysic: Float
+    let m_fAtkMagic: Float
 
     // 방어
-    var m_fDefPhysic: Float = 0.0
-    var m_fDefMagic: Float = 0.0
+    let m_fDefPhysic: Float
+    let m_fDefMagic: Float
+    
+    init(m_fBaseHP: Float = 0.0,
+         m_fAtkPhysic: Float = 0.0,
+         m_fAtkMagic: Float = 0.0,
+         m_fDefPhysic: Float = 0.0,
+         m_fDefMagic: Float = 0.0) {
+        self.m_fBaseHP = m_fBaseHP
+        self.m_fAtkPhysic = m_fAtkPhysic
+        self.m_fAtkMagic = m_fAtkMagic
+        self.m_fDefPhysic = m_fDefPhysic
+        self.m_fDefMagic = m_fDefMagic
+    }
+    
+    init(format: KItemFormatStatData) {
+        m_fBaseHP = format.m_fBaseHP
+        m_fAtkPhysic = format.m_fAtkPhysic
+        m_fAtkMagic = format.m_fAtkMagic
+        m_fDefPhysic = format.m_fDefPhysic
+        m_fDefMagic = format.m_fDefMagic
+    }
 }
 
-struct SpecialAbility {
+struct SpecialAbility: Encodable {
     var m_Type: SPECIAL_ABILITY_TYPE = .SAT_NONE
     var m_CoolTime: Int = 0
     var m_Value1: Int = 0
     var m_Value2: Int = 0
     var m_Value3: Int = 0
+    
+    init(format: KItemFormatSpecialAbility) {
+        m_Type = .init(rawValue: format.m_dwType)!
+        m_CoolTime = format.m_CoolTime.toInt()
+        m_Value1 = format.m_Value1.toInt()
+        m_Value2 = format.m_Value2.toInt()
+        m_Value3 = format.m_Value3.toInt()
+    }
+    
+    init() { }
 }
 
-enum SPECIAL_ABILITY_TYPE: UInt32 {
+enum SPECIAL_ABILITY_TYPE: UInt32, Encodable {
     case SAT_NONE = 0       // 없음
     case SAT_HP_UP          // HP증가
     case SAT_MP_UP          // MP증가
@@ -280,91 +405,101 @@ enum SPECIAL_ABILITY_TYPE: UInt32 {
     case SAT_END
 }
 
-struct SStatRelationLevel {
-    var m_bIsCommonItem: Bool = false
-    var m_byBaseHPRelLV: UInt8 = 0
-    var m_byAtkPhysicRelLV: UInt8 = 0
-    var m_byAtkMagicRelLV: UInt8 = 0
-    var m_byDefPhysicRelLV: UInt8 = 0
-    var m_byDefMagicRelLV: UInt8 = 0
+struct SStatRelationLevel: Encodable, Equatable {
+    static let `default` = SStatRelationLevel()
+    
+    let m_byBaseHPRelLV: Int
+    let m_byAtkPhysicRelLV: Int
+    let m_byAtkMagicRelLV: Int
+    let m_byDefPhysicRelLV: Int
+    let m_byDefMagicRelLV: Int
+    
+    init(m_byBaseHPRelLV: Int = 0,
+         m_byAtkPhysicRelLV: Int = 0,
+         m_byAtkMagicRelLV: Int = 0,
+         m_byDefPhysicRelLV: Int = 0,
+         m_byDefMagicRelLV: Int = 0) {
+        self.m_byBaseHPRelLV = m_byBaseHPRelLV
+        self.m_byAtkPhysicRelLV = m_byAtkPhysicRelLV
+        self.m_byAtkMagicRelLV = m_byAtkMagicRelLV
+        self.m_byDefPhysicRelLV = m_byDefPhysicRelLV
+        self.m_byDefMagicRelLV = m_byDefMagicRelLV
+    }
+    
+    init(format: KItemFormatStatRelLVData) {
+        m_byBaseHPRelLV = format.m_byBaseHPRelLV.toInt()
+        m_byAtkPhysicRelLV = format.m_byAtkPhysicRelLV.toInt()
+        m_byAtkMagicRelLV = format.m_byAtkMagicRelLV.toInt()
+        m_byDefPhysicRelLV = format.m_byDefPhysicRelLV.toInt()
+        m_byDefMagicRelLV = format.m_byDefMagicRelLV.toInt()
+    }
 }
 
-struct ItemTemplet {
-    var m_UseType: USE_TYPE = .UT_NONE              // 사용 방식 장착장비인지 아닌지, 장착장비라면 어떤식으로 장착하는지
-    var m_UseCondition: USE_CONDITION = .UC_NONE    // 사용 조건
-    var m_UseLevel: Int = 0                         // 사용 제한 레벨
-    var m_UnitType: UNIT_TYPE = .UT_NONE            // 사용 unittype
-    var m_UnitClass: UNIT_CLASS = .UC_NONE          // 사용 unit 클래스
-    
-    var m_BuyPvpRankCondition: PVP_RANK = .PVPRANK_NONE // 사용 랭크
-
+struct ItemTemplet: Encodable {
     var m_ItemID: Int = -1                  // 아이템 ID
     var m_Name: String = ""                 // 아이템 이름
     var m_Description: String = ""          // 아이템 설명
     var m_DescriptionInShop: String = ""    // 아이템 구매전 상점에서만 보이는 설명
 
-    var m_ModelName: [String] = Array(repeating: "", count: MAX_MODEL_COUNT_A_ITEM) // 하이퍼 모드는 _Hyper 를 붙인다
-
+    var m_ModelName: [String] = []              // 하이퍼 모드는 _Hyper 를 붙인다
     var m_TextureChangeXETName: String = ""     // 하이퍼 모드는 _Hyper 를 붙인다
     var m_AniXETName: String = ""               // 하이퍼 모드는 _Hyper 를 붙인다
     var m_AniName: String = ""                  // 하이퍼 모드는 _Hyper 를 붙인다
     var m_ShopImage: String = ""
     var m_DropViewer: String = ""               // 드롭시 사용할 파티클 시스템 이름
-
-    var m_ItemType: ITEM_TYPE = .IT_NONE
     
+    var m_ItemType: ITEM_TYPE = .IT_NONE
     var m_ItemGrade: ITEM_GRADE = .IG_NONE      // 아이템 등급
     
     var m_bFashion: Bool = false                // 패션 아이템
     var m_bVested: Bool = false                 // 귀속 아이템(양도불능/판매불능)
     var m_bCanEnchant: Bool = false             // 강화가능 아이템인가
     var m_bCanUseInventory: Bool = false        // 인벤토리에서 사용가능한 아이템인가
-    
+
     var m_bNoEquip: Bool = false    // 착용할수 없는 장비인가(교환용 장비)
-    
     var m_bIsPcBang: Bool = false   // PC방 전용 아이템
-    
     var m_iItemLevel: Int = 0       // 아이템 레벨 정보
 
-    var m_AttachFrameName: [String] = Array(repeating: "", count: MAX_MODEL_COUNT_A_ITEM) // 어느 본에 붙는가
-
+    var m_ucMaxSealCount: Int = 0         // 최대로 봉인할 수 있는 횟수
+    var m_iMaxAttribEnchantCount: Int = 0   // 최대 속성 강화 횟수
+    
+    var m_UseType: USE_TYPE = .UT_NONE              // 사용 방식 장착장비인지 아닌지, 장착장비라면 어떤식으로 장착하는지
+    var m_AttachFrameName: [String] = []            // 어느 본에 붙는가
+    
     var m_bCanHyperMode: Bool = false               // 하이퍼 모드 가능 아이템인가
-    
     var m_PeriodType: PERIOD_TYPE = .PT_INFINITY    // 아이템 존재기간
-    var m_Endurance: Int16 = -1             // 초기내구도
-    var m_EnduranceDamageMin: Int16 = 0     // 1스테이지플레이당내구도 감소량 최소
-    var m_EnduranceDamageMax: Int16 = 0     // 1스테이지플레이당내구도 감소량 최대
-    
+    var m_Endurance: Int = -1             // 초기내구도
+    var m_EnduranceDamageMin: Int = 0     // 1스테이지플레이당내구도 감소량 최소
+    var m_EnduranceDamageMax: Int = 0     // 1스테이지플레이당내구도 감소량 최대
     var m_RepairED: Float = 0.0     // 내구도 1 수리당 ED
     var m_RepairVP: Int = 0         // 내구도 1 수리당 VP
-    
     var m_Quantity: Int = 0         // 1묶음수량
     
     var m_PriceType: SHOP_PRICE_TYPE = .SPT_NONE    // 가격타입
     var m_Price: Int = 0            // 가격
     var m_PricePvPPoint: Int = 0    // 구매대전포인트
 
+    var m_UseCondition: USE_CONDITION = .UC_NONE    // 사용 조건
+    var m_UnitType: UNIT_TYPE = .UT_NONE            // 사용 unittype
+    var m_UnitClass: UNIT_CLASS = .UC_NONE          // 사용 unit 클래스
+    var m_UseLevel: Int = 0                         // 사용 제한 레벨
+    
+    var m_BuyPvpRankCondition: PVP_RANK = .PVPRANK_NONE // 사용 랭크
     var m_EqipPosition: EQIP_POSITION = .EP_NONE    // 장착 위치
     var m_Stat: Stat = Stat()                       // 아이템 스탯
-
     var m_SpecialAbilityList: [SpecialAbility] = [] // 특수 능력 목록
-    
     var m_vecSocketOption: [Int] = []               // 소켓 옵션
     var m_vecRandomSocketGroupID: [Int] = []        // 랜덤 소켓 그룹 ID
+
     var m_kStatRelationLevel: SStatRelationLevel = SStatRelationLevel() // 스탯 관계 레벨
 
     var m_CoolTime: Int = 0         // 쿨타임
     var m_SetID: Int = 0            // 세트 ID
 
-    var m_ucMaxSealCount: UInt8 = 0         // 최대로 봉인할 수 있는 횟수
-
-    var m_iMaxAttribEnchantCount: Int = 0   // 최대 속성 강화 횟수
-
-    var m_iAttributeLevel: Int16 = 0        // 요구 속성 레벨
-
+    var m_iAttributeLevel: Int = 0        // 요구 속성 레벨
     var m_iBuffFactorID: Int = 0            // 버프 팩터 ID
 
-    var m_bInventoryOnly: Bool = false      // 은행, 펫인벤 이동제한
+//    var m_bInventoryOnly: Bool = false      // 은행, 펫인벤 이동제한
 }
 
 struct SetItemData: Encodable {

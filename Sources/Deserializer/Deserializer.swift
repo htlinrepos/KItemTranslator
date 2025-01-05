@@ -7,6 +7,7 @@
 
 import Foundation
 
+let intSize = 4
 let dwordSize = 4
 let itemFormatHeaderSize = 16
 let itemFormatTempletSize = 188
@@ -94,15 +95,12 @@ class Deserializer {
 }
 
 extension Deserializer {
-    func getString(offsetBy dwOffset: UInt32) -> String {
+    func string(by dwOffset: UInt32) -> String {
         guard dwOffset != 0 else { return "" }
         // 读取长度（WORD 是 2 字节）
-        let wLength = data.withUnsafeBytes { buffer in
-            buffer.load(fromByteOffset: Int(dwOffset), as: UInt16.self)
-        }
+        let wLength = data.withUnsafeBytes { $0.load(fromByteOffset: Int(dwOffset), as: UInt16.self) }
         
         guard wLength != 0 else { return "" }
-
         let startIndex = Int(dwOffset) + MemoryLayout<UInt16>.size
         let stringData = data[startIndex ..< startIndex + Int(wLength) * 2]
         

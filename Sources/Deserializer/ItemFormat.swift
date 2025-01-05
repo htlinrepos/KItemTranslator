@@ -84,7 +84,7 @@ struct KItemFormatSetItemData {
         let needPartsToOptions = convertToDictionary(items: getSetItemNeedPartsNumNOptions(from: deserializer.data))
         return needPartsToOptions.keys.sorted().map {
             SetItemData(m_SetID: m_dwSetID.toInt(),
-                        m_SetName: deserializer.getString(offsetBy: m_dwOffset_SetName),
+                        m_SetName: deserializer.string(by: m_dwOffset_SetName),
                         m_mapNeedPartsNumNOptions: [$0: needPartsToOptions[$0] ?? []])
         }
     }
@@ -161,6 +161,139 @@ struct KItemFormatTemplet {
     var m_byNumCommonItemModelNames: UInt8 = 0
     var m_byNumCommonItemXETNames: UInt8 = 0
     var m_byNumSlashTraces: UInt8 = 0
+    
+    func toItemTemplate(with deserializer: Deserializer) -> ItemTemplet {
+        .init(m_ItemID: m_dwItemID.toInt(),
+              m_Name: deserializer.string(by: m_dwOffset_Name),
+              m_Description: deserializer.string(by: m_dwOffset_Description),
+              m_DescriptionInShop: deserializer.string(by: m_dwOffset_DescriptionInShop),
+              m_ModelName: [deserializer.string(by: m_adwOffset_ModelName.0),
+                            deserializer.string(by: m_adwOffset_ModelName.1)],
+              m_TextureChangeXETName: deserializer.string(by: m_dwOffset_TextureChangeXETName),
+              m_AniXETName: deserializer.string(by: m_dwOffset_AniXETName),
+              m_AniName: deserializer.string(by: m_dwOffset_AniName),
+              m_ShopImage: deserializer.string(by: m_dwOffset_ShopImage),
+              m_DropViewer: deserializer.string(by: m_dwOffset_DropViewer),
+              m_ItemType: itemType(),
+              m_ItemGrade: itemGrade(),
+              m_bFashion: fashion(),
+              m_bVested: vested(),
+              m_bCanEnchant: canEnchant(),
+              m_bCanUseInventory: canUseInventory(),
+              m_bNoEquip: noEquip(),
+              m_bIsPcBang: isPCBang(),
+              m_iItemLevel: m_iItemLevel.toInt(),
+              m_ucMaxSealCount: m_byMaxSealCount.toInt(),
+              m_iMaxAttribEnchantCount: m_byMaxAttribEnchantCount.toInt(),
+              m_UseType: useType(),
+              m_AttachFrameName: [deserializer.string(by: m_adwOffset_AttachFrameName.0),
+                                  deserializer.string(by: m_adwOffset_AttachFrameName.1)],
+              m_bCanHyperMode: canHyperMode(),
+              m_PeriodType: periodType(),
+              m_Endurance: m_sEndurance.toInt(),
+              m_EnduranceDamageMin: m_sEnduranceDamageMin.toInt(),
+              m_EnduranceDamageMax: m_sEnduranceDamageMax.toInt(),
+              m_RepairED: m_fRepairED,
+              m_RepairVP: m_iRepairVP.toInt(),
+              m_Quantity: m_iQuantity.toInt(),
+              m_PriceType: shopPriceType(),
+              m_Price: m_iPrice.toInt(),
+              m_PricePvPPoint: m_iPricePvPPoint.toInt(),
+              m_UseCondition: useCondition(),
+              m_UnitType: unitType(),
+              m_UnitClass: unitClass(),
+              m_UseLevel: m_byUseLevel.toInt(),
+              m_BuyPvpRankCondition: buyPVPRankCondition(),
+              m_EqipPosition: equipPosition(),
+              m_Stat: stat(with: deserializer),
+              m_SpecialAbilityList: specialAbilityList(with: deserializer),
+              m_vecSocketOption: socketOptions(with: deserializer),
+              m_vecRandomSocketGroupID: randomSocketGroup(with: deserializer),
+              m_kStatRelationLevel: statRelLV(with: deserializer),
+              m_CoolTime: m_byCoolTime.toInt(),
+              m_SetID: m_iSetID.toInt(),
+              m_iAttributeLevel: m_byAttributeLevel.toInt(),
+              m_iBuffFactorID: buffactorID(with: deserializer).toInt())
+    }
+    
+    
+    
+    func buffactorID(with deserializer: Deserializer) -> UInt16 {
+        guard m_dwOffset_BuffFactorIndices != 0 else { return 0 }
+        return deserializer.data.withUnsafeBytes { ptr in
+            ptr.load(fromByteOffset: Int(m_dwOffset_BuffFactorIndices), as: UInt16.self)
+        }
+    }
+    
+    func statRelLV(with deserializer: Deserializer) -> SStatRelationLevel {
+        guard m_dwOffset_StatRelationLevel != 0 else { return .init() }
+        return deserializer.data.withUnsafeBytes { ptr in
+            let format = ptr.load(fromByteOffset: Int(m_dwOffset_Stat), as: KItemFormatStatRelLVData.self)
+            return .init(format: format)
+        }
+    }
+    
+    func array<T>(with deserializer: Deserializer, by offset: Int) -> [T] {
+        guard offset != 0 else { return [] }
+        let bData = deserializer.data.advanced(by: offset)
+        let dwNum = bData.withUnsafeBytes { $0.load(as: UInt32.self) }
+        
+        var array = [T]()
+        for i in 0..<dwNum {
+            let data = bData.advanced(by: dwordSize + MemoryLayout<T>.size * Int(i))
+        }
+        return array
+    }
+    
+    func randomSocketGroup(with deserializer: Deserializer) -> [Int] {
+        guard m_dwOffset_RandomSocketOptions != 0 else { return [] }
+        let bData = deserializer.data.advanced(by: Int(m_dwOffset_RandomSocketOptions))
+        let dwNum = bData.withUnsafeBytes { $0.load(as: UInt32.self) }
+        
+        var randomSocketGroup = [Int]()
+        for i in 0..<dwNum {
+            let data = bData.advanced(by: dwordSize + intSize * Int(i))
+            let randomSocket = data.withUnsafeBytes { $0.load(as: Int32.self) }
+            randomSocketGroup.append(Int(randomSocket))
+        }
+        return randomSocketGroup
+    }
+    
+    func socketOptions(with deserializer: Deserializer) -> [Int] {
+        guard m_dwOffset_SocketOptions != 0 else { return [] }
+        let bData = deserializer.data.advanced(by: Int(m_dwOffset_SocketOptions))
+        let dwNum = bData.withUnsafeBytes { $0.load(as: UInt32.self) }
+        
+        var options = [Int]()
+        for i in 0..<dwNum {
+            let data = bData.advanced(by: dwordSize + intSize * Int(i))
+            let option = data.withUnsafeBytes { $0.load(as: Int32.self) }
+            options.append(Int(option))
+        }
+        return options
+    }
+    
+    func specialAbilityList(with deserializer: Deserializer) -> [SpecialAbility] {
+        guard m_dwOffset_SpecialAbilityList != 0 else { return [] }
+        let bData = deserializer.data.advanced(by: Int(m_dwOffset_SpecialAbilityList))
+        let dwNum = bData.withUnsafeBytes { $0.load(as: UInt32.self) }
+        
+        var abilities = [SpecialAbility]()
+        for i in 0..<dwNum {
+            let data = bData.advanced(by: dwordSize + MemoryLayout<KItemFormatSpecialAbility>.size * Int(i))
+            let item = data.withUnsafeBytes { $0.load(as: KItemFormatSpecialAbility.self) }
+            abilities.append(.init(format: item))
+        }
+        return abilities
+    }
+    
+    func stat(with deserializer: Deserializer) -> Stat {
+        guard m_dwOffset_Stat != 0 else { return .init() }
+        return deserializer.data.withUnsafeBytes { ptr in
+            let format = ptr.load(fromByteOffset: Int(m_dwOffset_Stat), as: KItemFormatStatData.self)
+            return .init(format: format)
+        }
+    }
     
     func fashion() -> Bool {
         getBit(EFlags.FLAG_BIT_FASHION)
