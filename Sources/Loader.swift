@@ -47,7 +47,18 @@ struct Loader {
             $0.toItemTemplate(with: deserializer)
         }
         
+        let siEncoder = SetItemLuaEncoder()
+        let iEncoder = ItemLuaEncoder()
         
+        do {
+            try itemSets.encode(to: siEncoder)
+            try itemTemplates.encode(to: iEncoder)
+            
+            try siEncoder.code.data(using: .utf16LittleEndian)?.write(to: fileManager.homeDirectoryForCurrentUser.appendingPathComponent("/Downloads/SetItem.lua"))
+            try iEncoder.code.data(using: .utf16LittleEndian)?.write(to: fileManager.homeDirectoryForCurrentUser.appendingPathComponent("/Downloads/Item.lua"))
+        } catch {
+            printError(error)
+        }
     }
     
     func content(path: String) -> Data? {
@@ -63,5 +74,5 @@ struct Loader {
 
 func printError<T>(_ value: T) {
     print("!!!!!!!!!!!! Error !!!!!!!!!!!!!!!")
-    print("           \(value)")
+    print("\(value)")
 }

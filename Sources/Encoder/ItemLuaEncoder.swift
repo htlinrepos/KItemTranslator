@@ -62,8 +62,14 @@ struct ILuaKeyedEncodingContainer<Key: CodingKey>: KeyedEncodingContainerProtoco
         
         switch value {
         case let value as Int:
-            guard value != 0 else { break }
-            codingString.append("\(padding)\(key.stringValue) = \(value),\n")
+            switch key.stringValue {
+            case "m_ItemID", "m_Endurance":
+                guard value != -1 else { break }
+                codingString.append("\(padding)\(key.stringValue) = \(value),\n")
+            default:
+                guard value != 0 else { break }
+                codingString.append("\(padding)\(key.stringValue) = \(value),\n")
+            }
         case let value as Float:
             guard value != 0.0 else { break }
             codingString.append("\(padding)\(key.stringValue) = \(value),\n")
@@ -119,7 +125,7 @@ struct ILuaKeyedEncodingContainer<Key: CodingKey>: KeyedEncodingContainerProtoco
             \(padding)\(key.stringValue) =
             \(padding){
             \(kvEncoder.code)
-            \(padding)},
+            \(padding)},\n
             """
             codingString.append(string)
         case let value as [SpecialAbility]:
@@ -130,7 +136,7 @@ struct ILuaKeyedEncodingContainer<Key: CodingKey>: KeyedEncodingContainerProtoco
             \(padding)\(key.stringValue) =
             \(padding){
             \(kvEncoder.code)
-            \(padding)}\n
+            \(padding)},\n
             """
             codingString.append(string)
         case let value as [Int]:
@@ -147,7 +153,7 @@ struct ILuaKeyedEncodingContainer<Key: CodingKey>: KeyedEncodingContainerProtoco
             \(padding)\(key.stringValue) =
             \(padding){
             \(kvEncoder.code)
-            \(padding)},
+            \(padding)},\n
             """
             codingString.append(string)
         default:
