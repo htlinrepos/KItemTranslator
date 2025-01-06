@@ -7,99 +7,6 @@
 
 import Foundation
 
-enum BUFF_FACTOR_ID: Int {
-    case BFI_NONE = 0
-    case BFI_HYPER_MODE = 1
-    
-    case BFI_DEBUFF_SIDE_EFFECT_MEDICINE = 67
-    case BFI_DEBUFF_SIDE_EFFECT_CREST = 68
-    
-    case BFI_DEBUFF_BIND = 73
-    case BFI_DEBUFF_BIND_WITH_MEMO = 74
-    case BFI_DEBUFF_DEATH_SENTENCE = 75
-    
-    case BFI_CALM_REST = 78
-    
-    case BFI_DEBUFF_SI_P_EIS_MIND_OF_FIGHTER = 80
-    case BFI_BUFF_OVER_HEAT = 84
-    
-    case BFI_BUFF_RETURN_OF_HERO = 114
-    
-    case BFI_BUFF_PET_AURA_SKILL_LEVEL_1_DEFAULT = 125
-    
-    case BFI_BUFF_PET_AURA_SKILL_LEVEL_2_DEFAULT = 130
-    
-    case BFI_BUFF_PET_AURA_SKILL_LEVEL_3_DEFAULT = 135
-    
-    case BFI_BUFF_MECHANIZATION_SPEED_UP = 141
-    
-    case BFI_BUFF_HENIR_FIRE = 147
-    case BFI_BUFF_HENIR_WATER = 148
-    case BFI_BUFF_HENIR_NATURE = 149
-    case BFI_BUFF_HENIR_WIND = 150
-    case BFI_BUFF_HENIR_LIGHT = 151
-    
-    case BFI_EMPTY_EXP_BUFF = 154
-    
-    case BFI_ARA_FULL_HYPER_MODE = 156
-    
-    case BFI_BUFF_BREAKING_MEMO = 181
-    
-    case BFI_BUFF_SUPER_AMOR_FOR_RIDING = 199
-    
-    case BFI_BUFF_TRADE_BLOCK = 205
-    case BFI_RIDING_SCORPION_ENERGY_SWORD = 206
-    
-    case BFI_BUFF_OVER_HEAT_ENHANCE = 217
-    
-    case BFI_BUFF_VICTORIOUS_SWORD = 233
-    
-    case BFI_BUFF_GALE_WAY_OF_SWORD = 237
-    
-    case BFI_BUFF_GALE_MP_GAIN_INCREASE = 245
-    case BFI_BUFF_ANNIHILATION_WAY_OF_SWORD = 246
-    case BFI_BUFF_ANNIHILATION_WAY_OF_SWORD_PVP = 247
-    case BFI_BUFF_ANNIHILATION_SUPER_ARMOR = 248
-    
-    case BFI_BUFF_SI_A_ALD_REFLECTION = 259
-    
-    case BFI_DEBUFF_SELF_PROTECTION_FORTITUDE = 264
-    
-    case BFI_DEBUFF_TELEPORT_CONSUME_MP = 290
-    case BFI_DEBUFF_STIGMA_OF_FIRE = 291
-    case BFI_DEBUFF_JUDGEMENT_FIRE = 292
-    
-    case BFI_BUFF_FIRE_BLOSSOMS = 295
-    
-    case BFI_DEBUFF_HIGH_FEVER = 300
-    case BFI_DEBUFF_FLAME_SWORD = 301
-    case BFI_BUFF_2013_DEFENCE_ENTER_100_PERCENT_BUFF = 302
-    
-    case BFI_DEBUFF_JUDGEMENT_FIRE2 = 307
-    
-    case BFI_FORMATION_MODE = 315
-    
-    case BFI_BUFF_SI_A_ALD_REFLECTION_MEMO = 334
-    
-    case BFI_BUFF_SWORD_ENCHANT_CHARGE_MP = 338
-    
-    case BFI_BUFF_SGM_VICTORIOUS_SWORD = 345
-    case BFI_BUFF_LIBRARY_OF_LIMITLESS_MANA_RECOVERY = 346
-    case BFI_DEBUFF_MIND_BREAK = 347
-    case BFI_DEBUFF_EMP_SHOCK_NEAR = 348
-    case BFI_DEBUFF_EMP_SHOCK_FAR = 349
-    
-    case BFI_NASOD_ARMOR = 353
-    
-    case BFI_BUFF_NATURAL_FORCE = 355
-    case BFI_BUFF_POWER_EXCHANGER_HALF_UP = 356
-    case BFI_BUFF_POWER_EXCHANGER_HALF_DOWN = 357
-    case BFI_DEBUFF_PLASMA_LINK = 358
-    case BFI_BUFF_QUICKSILVER_FRENZY = 359
-    
-    case BFI_BUFF_NAVER = 361
-}
-
 enum USE_CONDITION: UInt32, Encodable {
     case UC_NONE = 0        // 아무도 사용할 수 없음
     case UC_ANYONE          // 아무나 사용할 수 있음
@@ -518,8 +425,6 @@ struct ItemTemplet: Encodable {
 
     var m_iAttributeLevel: Int = 0        // 요구 속성 레벨
     var m_iBuffFactorID: Int = 0            // 버프 팩터 ID
-
-//    var m_bInventoryOnly: Bool = false      // 은행, 펫인벤 이동제한
 }
 
 struct SetItemData: Encodable {

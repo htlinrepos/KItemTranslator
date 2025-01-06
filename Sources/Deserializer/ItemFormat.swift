@@ -108,59 +108,59 @@ struct KItemFormatSetItemData {
 }
 
 struct KItemFormatTemplet {
-    var m_dwItemID: UInt32 = 0
-    var m_dwFlags: UInt32 = 0
-    var m_dwFlags2: UInt32 = 0
-    var m_iItemLevel: Int32 = 0
-    var m_iQuantity: Int32 = 0
-    var m_fRepairED: Float = 0
-    var m_iRepairVP: Int32 = 0
-    var m_iPrice: Int32 = 0
-    var m_iPricePvPPoint: Int32 = 0
-    var m_iSetID: Int32 = 0
-    var m_fAddMaxMP: Float = 0
+    let m_dwItemID: UInt32
+    let m_dwFlags: UInt32
+    let m_dwFlags2: UInt32
+    let m_iItemLevel: Int32
+    let m_iQuantity: Int32
+    let m_fRepairED: Float
+    let m_iRepairVP: Int32
+    let m_iPrice: Int32
+    let m_iPricePvPPoint: Int32
+    let m_iSetID: Int32
+    let m_fAddMaxMP: Float
     
-    var m_dwOffset_Name: UInt32 = 0
-    var m_dwOffset_Description: UInt32 = 0
-    var m_dwOffset_DescriptionInShop: UInt32 = 0
-    var m_adwOffset_AttachFrameName: (UInt32, UInt32, UInt32, UInt32, UInt32, UInt32)
-    var m_adwOffset_ModelName: (UInt32, UInt32, UInt32, UInt32, UInt32, UInt32)
-    var m_dwOffset_TextureChangeXETName: UInt32 = 0
-    var m_dwOffset_AniXETName: UInt32 = 0
-    var m_dwOffset_AniName: UInt32 = 0
-    var m_dwOffset_ShopImage: UInt32 = 0
-    var m_dwOffset_DropViewer: UInt32 = 0
-    var m_dwOffset_DescriptionInSkillNote: UInt32 = 0
-    var m_dwOffset_Stat: UInt32 = 0
-    var m_dwOffset_BuffFactorIndices: UInt32 = 0
-    var m_dwOffset_SpecialAbilityList: UInt32 = 0
-    var m_dwOffset_SocketOptions: UInt32 = 0
-    var m_dwOffset_AttachedParticleData: UInt32 = 0
-    var m_dwOffset_AttachedMeshData: UInt32 = 0
-    var m_dwOffset_Extra: UInt32 = 0
-    var m_dwOffset_RandomSocketOptions: UInt32 = 0
-    var m_dwOffset_StatRelationLevel: UInt32 = 0
+    let m_dwOffset_Name: UInt32
+    let m_dwOffset_Description: UInt32
+    let m_dwOffset_DescriptionInShop: UInt32
+    let m_adwOffset_AttachFrameName: (UInt32, UInt32, UInt32, UInt32, UInt32, UInt32)
+    let m_adwOffset_ModelName: (UInt32, UInt32, UInt32, UInt32, UInt32, UInt32)
+    let m_dwOffset_TextureChangeXETName: UInt32
+    let m_dwOffset_AniXETName: UInt32
+    let m_dwOffset_AniName: UInt32
+    let m_dwOffset_ShopImage: UInt32
+    let m_dwOffset_DropViewer: UInt32
+    let m_dwOffset_DescriptionInSkillNote: UInt32
+    let m_dwOffset_Stat: UInt32
+    let m_dwOffset_BuffFactorIndices: UInt32
+    let m_dwOffset_SpecialAbilityList: UInt32
+    let m_dwOffset_SocketOptions: UInt32
+    let m_dwOffset_AttachedParticleData: UInt32
+    let m_dwOffset_AttachedMeshData: UInt32
+    let m_dwOffset_Extra: UInt32
+    let m_dwOffset_RandomSocketOptions: UInt32
+    let m_dwOffset_StatRelationLevel: UInt32
     
-    var m_sEndurance: Int16 = 0
-    var m_sEnduranceDamageMin: Int16 = 0
-    var m_sEnduranceDamageMax: Int16 = 0
-    var m_usSummonNpcID: UInt16 = 0
-    var m_byBuyPvpRankCondition: UInt8 = 0
-    var m_byUseLevel: UInt8 = 0
-    var m_byUnitType: UInt8 = 0
-    var m_byUnitClass: UInt8 = 0
-    var m_byBuffID: UInt8 = 0
-    var m_byEqipPosition: UInt8 = 0
-    var m_byCoolTime: UInt8 = 0
-    var m_byMaxSealCount: UInt8 = 0
-    var m_byMaxAttribEnchantCount: UInt8 = 0
-    var m_byAttributeLevel: UInt8 = 0
-    var m_byNumFrameOffsets: UInt8 = 0
-    var m_byNumRenderScales: UInt8 = 0
-    var m_byNumRenderRotates: UInt8 = 0
-    var m_byNumCommonItemModelNames: UInt8 = 0
-    var m_byNumCommonItemXETNames: UInt8 = 0
-    var m_byNumSlashTraces: UInt8 = 0
+    let m_sEndurance: Int16
+    let m_sEnduranceDamageMin: Int16
+    let m_sEnduranceDamageMax: Int16
+    let m_usSummonNpcID: UInt16
+    let m_byBuyPvpRankCondition: UInt8
+    let m_byUseLevel: UInt8
+    let m_byUnitType: UInt8
+    let m_byUnitClass: UInt8
+    let m_byBuffID: UInt8
+    let m_byEqipPosition: UInt8
+    let m_byCoolTime: UInt8
+    let m_byMaxSealCount: UInt8
+    let m_byMaxAttribEnchantCount: UInt8
+    let m_byAttributeLevel: UInt8
+    let m_byNumFrameOffsets: UInt8
+    let m_byNumRenderScales: UInt8
+    let m_byNumRenderRotates: UInt8
+    let m_byNumCommonItemModelNames: UInt8
+    let m_byNumCommonItemXETNames: UInt8
+    let m_byNumSlashTraces: UInt8
     
     func toItemTemplate(with deserializer: Deserializer) -> ItemTemplet {
         .init(m_ItemID: m_dwItemID.toInt(),
@@ -215,14 +215,16 @@ struct KItemFormatTemplet {
               m_iAttributeLevel: m_byAttributeLevel.toInt(),
               m_iBuffFactorID: buffactorID(with: deserializer).toInt())
     }
-    
-    
-    
+   
     func buffactorID(with deserializer: Deserializer) -> UInt16 {
         guard m_dwOffset_BuffFactorIndices != 0 else { return 0 }
-        return deserializer.data.withUnsafeBytes { ptr in
+        let num = deserializer.data.withUnsafeBytes { ptr in
             ptr.load(fromByteOffset: Int(m_dwOffset_BuffFactorIndices), as: UInt16.self)
         }
+        if num != 0 {
+            print("\(m_dwItemID): \(num)")
+        }
+        return 0
     }
     
     func statRelLV(with deserializer: Deserializer) -> SStatRelationLevel {
@@ -231,18 +233,6 @@ struct KItemFormatTemplet {
             let format = ptr.load(fromByteOffset: Int(m_dwOffset_Stat), as: KItemFormatStatRelLVData.self)
             return .init(format: format)
         }
-    }
-    
-    func array<T>(with deserializer: Deserializer, by offset: Int) -> [T] {
-        guard offset != 0 else { return [] }
-        let bData = deserializer.data.advanced(by: offset)
-        let dwNum = bData.withUnsafeBytes { $0.load(as: UInt32.self) }
-        
-        var array = [T]()
-        for i in 0..<dwNum {
-            let data = bData.advanced(by: dwordSize + MemoryLayout<T>.size * Int(i))
-        }
-        return array
     }
     
     func randomSocketGroup(with deserializer: Deserializer) -> [Int] {

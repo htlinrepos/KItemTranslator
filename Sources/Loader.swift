@@ -39,23 +39,25 @@ struct Loader {
         
         print("文件头验证成功")
         
-        let itemSets = deserializer.itemSets().flatMap {
-            $0.toSetItemData(with: deserializer)
-        }
+//        let itemSets = deserializer.itemSets().flatMap {
+//            $0.toSetItemData(with: deserializer)
+//        }
         
         let itemTemplates = deserializer.itemTemplates().map {
             $0.toItemTemplate(with: deserializer)
         }
         
-        let siEncoder = SetItemLuaEncoder()
+//        let siEncoder = SetItemLuaEncoder()
         let iEncoder = ItemLuaEncoder()
         
         do {
-            try itemSets.encode(to: siEncoder)
-            try itemTemplates.encode(to: iEncoder)
+//            try itemSets.encode(to: siEncoder)
+//            try itemTemplates.encode(to: iEncoder)
             
-            try siEncoder.code.data(using: .utf16LittleEndian)?.write(to: fileManager.homeDirectoryForCurrentUser.appendingPathComponent("/Downloads/SetItem.lua"))
-            try iEncoder.code.data(using: .utf16LittleEndian)?.write(to: fileManager.homeDirectoryForCurrentUser.appendingPathComponent("/Downloads/Item.lua"))
+//            try siEncoder.code.data(using: .utf8)?
+//                .write(to: fileManager.homeDirectoryForCurrentUser.appendingPathComponent("/Downloads/SetItem.lua"))
+//            try iEncoder.code.data(using: .utf8)?
+//                .write(to: fileManager.homeDirectoryForCurrentUser.appendingPathComponent("/Downloads/Item.lua"))
         } catch {
             printError(error)
         }

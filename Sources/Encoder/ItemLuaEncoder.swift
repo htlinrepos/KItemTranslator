@@ -5,6 +5,8 @@
 //  Created by Erwin Lin on 1/5/25.
 //
 
+import Foundation
+
 class ItemLuaEncoder: Encoder {
     var codingPath: [CodingKey] = []
     var userInfo: [CodingUserInfoKey : Any] = [:]
@@ -75,8 +77,12 @@ struct ILuaKeyedEncodingContainer<Key: CodingKey>: KeyedEncodingContainerProtoco
             codingString.append("\(padding)\(key.stringValue) = \(value),\n")
         case let value as String:
             guard !value.isEmpty else { break }
-            let drop = value.replacingOccurrences(of: "\n", with: " ")
-            codingString.append("\(padding)\(key.stringValue) = \"\(drop)\",\n")
+            let data = try JSONEncoder().encode(value)
+            guard let string = String(data: data, encoding: .utf8) else {
+                printError(value)
+                break
+            }
+            codingString.append("\(padding)\(key.stringValue) = \(string),\n")
         case let value as [String]:
             guard !value.isEmpty else { break }
             for (i, str) in value.enumerated() {
@@ -86,7 +92,7 @@ struct ILuaKeyedEncodingContainer<Key: CodingKey>: KeyedEncodingContainerProtoco
             }
         case let value as Bool:
             guard value == true else { break }
-            codingString.append("\(padding)\(key.stringValue) = \(value),\n")
+            codingString.append("\(padding)\(key.stringValue) = True,\n")
         case let value as ITEM_TYPE:
             guard value != .IT_NONE else { break }
             codingString.append("\(padding)\(key.stringValue) = ITEM_TYPE[\"\(value)\"],\n")
@@ -100,7 +106,6 @@ struct ILuaKeyedEncodingContainer<Key: CodingKey>: KeyedEncodingContainerProtoco
             guard value != .PT_INFINITY else { break }
             codingString.append("\(padding)\(key.stringValue) = PERIOD_TYPE[\"\(value)\"],\n")
         case let value as SHOP_PRICE_TYPE:
-            guard value != .SPT_NONE else { break }
             codingString.append("\(padding)\(key.stringValue) = SHOP_PRICE_TYPE[\"\(value)\"],\n")
         case let value as USE_CONDITION:
             guard value != .UC_NONE else { break }
