@@ -13,8 +13,10 @@ struct Loader {
     
     /// item.kim file path
     let input: String
+    
+    private(set) var deserializer: Deserializer?
 
-    func load() {
+    mutating func load() {
         guard
             input.hasSuffix(".kim") || input.hasSuffix(".KIM"),
             let data = content(path: input)
@@ -28,38 +30,48 @@ struct Loader {
         
         assert(data.count > formatHeaderSize, "验证文件大小失败")
         
-        let deserializer = Deserializer(data: data)
+        self.deserializer = Deserializer(data: data)
         
         precondition(itemFormatHeaderSize == formatHeaderSize)
         precondition(itemFormatTempletSize == formatTemplateSize)
         
-        
-        assert(deserializer.header.m_dwMagic == itemFormatMagic, "文件头格式错误")
-        assert(deserializer.header.m_dwVersion == itemFormatVersion, "文件头格式错误")
+        assert(deserializer!.header.m_dwMagic == itemFormatMagic, "文件头格式错误")
+        assert(deserializer!.header.m_dwVersion == itemFormatVersion, "文件头格式错误")
         
         print("文件头验证成功")
-        
-//        let itemSets = deserializer.itemSets().flatMap {
-//            $0.toSetItemData(with: deserializer)
-//        }
-        
-        let itemTemplates = deserializer.itemTemplates().map {
-            $0.toItemTemplate(with: deserializer)
+    }
+    
+    func outputSetItemLuaFile() {
+        DispatchQueue.global(qos: .utility).async {
+            guard let deserializer else { return }
+            let siEncoder = SetItemLuaEncoder()
+            let itemSets = deserializer.itemSets().flatMap {
+                $0.toSetItemData(with: deserializer)
+            }
+            do {
+                try itemSets.encode(to: siEncoder)
+                try siEncoder.code.data(using: .utf8)?
+                    .write(to: fileManager.homeDirectoryForCurrentUser.appendingPathComponent("/Downloads/SetItem.lua"))
+            } catch {
+                printError(error)
+            }
         }
-        
-//        let siEncoder = SetItemLuaEncoder()
-        let iEncoder = ItemLuaEncoder()
-        
-        do {
-//            try itemSets.encode(to: siEncoder)
-//            try itemTemplates.encode(to: iEncoder)
-            
-//            try siEncoder.code.data(using: .utf8)?
-//                .write(to: fileManager.homeDirectoryForCurrentUser.appendingPathComponent("/Downloads/SetItem.lua"))
-//            try iEncoder.code.data(using: .utf8)?
-//                .write(to: fileManager.homeDirectoryForCurrentUser.appendingPathComponent("/Downloads/Item.lua"))
-        } catch {
-            printError(error)
+    }
+    
+    func outputItemLuaFile() {
+        DispatchQueue.global(qos: .utility).async {
+            guard let deserializer else { return }
+            let itemTemplates = deserializer.itemTemplates().map {
+                $0.toItemTemplate(with: deserializer)
+            }
+            let iEncoder = ItemLuaEncoder()
+            do {
+                try itemTemplates.encode(to: iEncoder)
+                try iEncoder.code.data(using: .utf8)?
+                    .write(to: fileManager.homeDirectoryForCurrentUser.appendingPathComponent("/Downloads/Item.lua"))
+            } catch {
+                printError(error)
+            }
         }
     }
     

@@ -15,8 +15,12 @@ struct Translator: ParsableCommand {
     var input: String
     
     func run() {
-        let loader = Loader(input: input)
+        var loader = Loader(input: input)
+        
         loader.load()
+        
+        // 输出
+        loader.outputItemLuaFile()
     }
 }
 

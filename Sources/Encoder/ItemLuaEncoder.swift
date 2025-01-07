@@ -56,7 +56,7 @@ struct ILuaKeyedEncodingContainer<Key: CodingKey>: KeyedEncodingContainerProtoco
     
     mutating func encode<T>(_ value: T, forKey key: Key) throws where T : Encodable {
         defer {
-            if key.stringValue == "m_iBuffFactorID" {
+            if key.stringValue == "BUFF_FACTOR" {
                 codingString.removeLast()
                 encoder.appendLuaCode(template)
             }
@@ -68,6 +68,15 @@ struct ILuaKeyedEncodingContainer<Key: CodingKey>: KeyedEncodingContainerProtoco
             case "m_ItemID", "m_Endurance":
                 guard value != -1 else { break }
                 codingString.append("\(padding)\(key.stringValue) = \(value),\n")
+            case "BUFF_FACTOR":
+                guard value != 0 else { break }
+                let string = """
+                \(padding)\(key.stringValue) =
+                \(padding){
+                \(padding)\(padding)BUFF_FACTOR_ID["Test, Test, Test"],
+                \(padding)},\n
+                """
+                codingString.append(string)
             default:
                 guard value != 0 else { break }
                 codingString.append("\(padding)\(key.stringValue) = \(value),\n")
@@ -179,7 +188,6 @@ struct ILuaUnKeyedEncodingContainer: UnkeyedEncodingContainer {
     }
     
     func encode<T>(_ value: T) throws where T : Encodable {
-//        print("Encoding value: \(value)")
         if let value = value as? ItemTemplet {
             try value.encode(to: encoder)
         }

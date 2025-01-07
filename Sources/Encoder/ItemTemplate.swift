@@ -489,6 +489,6 @@ extension ItemTemplet {
        case m_CoolTime
        case m_SetID
        case m_iAttributeLevel
-       case m_iBuffFactorID
+       case m_iBuffFactorID = "BUFF_FACTOR"
    }
 }

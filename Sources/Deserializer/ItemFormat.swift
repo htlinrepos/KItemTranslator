@@ -221,10 +221,7 @@ struct KItemFormatTemplet {
         let num = deserializer.data.withUnsafeBytes { ptr in
             ptr.load(fromByteOffset: Int(m_dwOffset_BuffFactorIndices), as: UInt16.self)
         }
-        if num != 0 {
-            print("\(m_dwItemID): \(num)")
-        }
-        return 0
+        return num
     }
     
     func statRelLV(with deserializer: Deserializer) -> SStatRelationLevel {
