@@ -68,15 +68,6 @@ struct ILuaKeyedEncodingContainer<Key: CodingKey>: KeyedEncodingContainerProtoco
             case "m_ItemID", "m_Endurance":
                 guard value != -1 else { break }
                 codingString.append("\(padding)\(key.stringValue) = \(value),\n")
-            case "BUFF_FACTOR":
-                guard value != 0 else { break }
-                let string = """
-                \(padding)\(key.stringValue) =
-                \(padding){
-                \(padding)\(padding)BUFF_FACTOR_ID["Test, Test, Test"],
-                \(padding)},\n
-                """
-                codingString.append(string)
             default:
                 guard value != 0 else { break }
                 codingString.append("\(padding)\(key.stringValue) = \(value),\n")
@@ -167,6 +158,15 @@ struct ILuaKeyedEncodingContainer<Key: CodingKey>: KeyedEncodingContainerProtoco
             \(padding)\(key.stringValue) =
             \(padding){
             \(kvEncoder.code)
+            \(padding)},\n
+            """
+            codingString.append(string)
+        case let value as BUFF_FACTOR_ID:
+            guard value != .BFI_NONE else { break }
+            let string = """
+            \(padding)\(key.stringValue) =
+            \(padding){
+            \(padding)\(padding)BUFF_FACTOR_ID["\(value))"],
             \(padding)},\n
             """
             codingString.append(string)

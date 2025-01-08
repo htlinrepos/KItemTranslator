@@ -42,36 +42,32 @@ struct Loader {
     }
     
     func outputSetItemLuaFile() {
-        DispatchQueue.global(qos: .utility).async {
-            guard let deserializer else { return }
-            let siEncoder = SetItemLuaEncoder()
-            let itemSets = deserializer.itemSets().flatMap {
-                $0.toSetItemData(with: deserializer)
-            }
-            do {
-                try itemSets.encode(to: siEncoder)
-                try siEncoder.code.data(using: .utf8)?
-                    .write(to: fileManager.homeDirectoryForCurrentUser.appendingPathComponent("/Downloads/SetItem.lua"))
-            } catch {
-                printError(error)
-            }
+        guard let deserializer else { return }
+        let itemSets = deserializer.itemSets().flatMap {
+            $0.toSetItemData(with: deserializer)
+        }
+        let siEncoder = SetItemLuaEncoder()
+        do {
+            try itemSets.encode(to: siEncoder)
+            try siEncoder.code.data(using: .utf8)?
+                .write(to: fileManager.homeDirectoryForCurrentUser.appendingPathComponent("/Downloads/SetItem.lua"))
+        } catch {
+            printError(error)
         }
     }
     
     func outputItemLuaFile() {
-        DispatchQueue.global(qos: .utility).async {
-            guard let deserializer else { return }
-            let itemTemplates = deserializer.itemTemplates().map {
-                $0.toItemTemplate(with: deserializer)
-            }
-            let iEncoder = ItemLuaEncoder()
-            do {
-                try itemTemplates.encode(to: iEncoder)
-                try iEncoder.code.data(using: .utf8)?
-                    .write(to: fileManager.homeDirectoryForCurrentUser.appendingPathComponent("/Downloads/Item.lua"))
-            } catch {
-                printError(error)
-            }
+        guard let deserializer else { return }
+        let itemTemplates = deserializer.itemTemplates().map {
+            $0.toItemTemplate(with: deserializer)
+        }
+        let iEncoder = ItemLuaEncoder()
+        do {
+            try itemTemplates.encode(to: iEncoder)
+            try iEncoder.code.data(using: .utf8)?
+                .write(to: fileManager.homeDirectoryForCurrentUser.appendingPathComponent("/Downloads/Item.lua"))
+        } catch {
+            printError(error)
         }
     }
     

@@ -424,7 +424,7 @@ struct ItemTemplet: Encodable {
     var m_SetID: Int = 0            // 세트 ID
 
     var m_iAttributeLevel: Int = 0        // 요구 속성 레벨
-    var m_iBuffFactorID: Int = 0            // 버프 팩터 ID
+    var m_iBuffFactorID: BUFF_FACTOR_ID = .BFI_NONE            // 버프 팩터 ID
 }
 
 struct SetItemData: Encodable {
