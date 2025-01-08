@@ -166,7 +166,7 @@ struct ILuaKeyedEncodingContainer<Key: CodingKey>: KeyedEncodingContainerProtoco
             let string = """
             \(padding)\(key.stringValue) =
             \(padding){
-            \(padding)\(padding)BUFF_FACTOR_ID["\(value))"],
+            \(padding)\(padding)BUFF_FACTOR_ID["\(value)"],
             \(padding)},\n
             """
             codingString.append(string)
