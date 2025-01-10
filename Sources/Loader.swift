@@ -14,6 +14,9 @@ struct Loader {
     /// The item.kim file path
     let input: String
     
+    // BOM 的字节序列
+    let bom: [UInt8] = [0xEF, 0xBB, 0xBF]
+    
     private(set) var deserializer: Deserializer?
 
     mutating func load() -> Bool {
@@ -60,8 +63,11 @@ struct Loader {
             let path = fileManager.currentDirectoryPath + "/SetItem.lua"
             do {
                 try itemSets.encode(to: siEncoder)
-                try siEncoder.code.data(using: .utf8)?
-                    .write(to: .init(fileURLWithPath: path))
+                if let data = siEncoder.code.data(using: .utf8) {
+                    try (bom + data).write(to: .init(fileURLWithPath: path))
+                } else {
+                    print("UTF8 encode failed.")
+                }
             } catch {
                 printError(error)
             }
@@ -79,8 +85,11 @@ struct Loader {
             let path = fileManager.currentDirectoryPath + "/Item.lua"
             do {
                 try itemTemplates.encode(to: iEncoder)
-                try iEncoder.code.data(using: .utf8)?
-                    .write(to: .init(fileURLWithPath: path))
+                if let data = iEncoder.code.data(using: .utf8) {
+                    try (bom + data).write(to: .init(fileURLWithPath: path))
+                } else {
+                    print("UTF8 encode failed.")
+                }
             } catch {
                 printError(error)
             }
