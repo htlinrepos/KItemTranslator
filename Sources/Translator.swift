@@ -10,17 +10,34 @@ import Foundation
 
 @main
 struct Translator: ParsableCommand {
-    
-    @Option(name: [.short, .long], help: "Input kim file path.")
+    @Argument(help: "The kim file path.")
     var input: String
     
     func run() {
         var loader = Loader(input: input)
         
-        loader.load()
+        guard loader.load() else {
+            print("Load failed.")
+            Translator.exit()
+        }
         
-        // 输出
-        loader.outputItemLuaFile()
+        print("开始解析...")
+        
+        let group = DispatchGroup()
+        
+        group.enter()
+        loader.outputItemLuaFile {
+            group.leave()
+        }
+        
+        group.enter()
+        loader.outputSetItemLuaFile {
+            group.leave()
+        }
+        
+        group.wait()
+        
+        print("Done.")
     }
 }
 

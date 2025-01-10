@@ -29,4 +29,10 @@ class OutputFileTests: XCTestCase {
         
         try string.data(using: .utf16LittleEndian)?.write(to: url)
     }
+    
+    func testLocalURL() {
+        let string = fileManager.currentDirectoryPath
+        let url = URL(fileURLWithPath: string).appendingPathComponent("Item.lua")
+        print(url)
+    }
 }
